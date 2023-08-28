@@ -1,0 +1,15 @@
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.csproj.AssemblyReference.cache
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.GeneratedMSBuildEditorConfig.editorconfig
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfoInputs.cache
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.AssemblyInfo.cs
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.csproj.CoreCompileInputs.cache
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\Monopoly.exe
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\Monopoly.deps.json
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\Monopoly.runtimeconfig.json
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\Monopoly.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\Monopoly.pdb
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\refint\Monopoly.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.pdb
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.genruntimeconfig.cache
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\ref\Monopoly.dll
