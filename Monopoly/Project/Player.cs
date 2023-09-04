@@ -1,4 +1,4 @@
-using MonopolyInterface;
+using Monopoly;
 
 public class Player : IPlayer 
 {

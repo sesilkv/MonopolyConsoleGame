@@ -1,4 +1,4 @@
-using MonopolyInterface;
+using Monopoly;
 
 public class Dice : IDice 
 {
@@ -12,18 +12,9 @@ public class Dice : IDice
 	public int Roll()
 	{
 		var _random = new Random();
-		int result = _random.Next(1, _numOfSide + 1);
-		return result;
-	}
-	
-	//should I declare SetDiceSide method?
-	public bool SetDiceSide(int numOfSide)
-	{
-		if(numOfSide > 0)
-		{
-			_numOfSide = numOfSide;
-			return true;
-		}
-		return false;
+		int res1 = _random.Next(1, 7);
+		int res2 = _random.Next(1, 7);
+		int total = res1 + res2;
+		return total;
 	}
 }

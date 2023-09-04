@@ -1,4 +1,4 @@
-namespace MonopolyInterface;
+namespace Monopoly;
 
 public interface IPlayer 
 {

@@ -1,9 +1,11 @@
-﻿using MonopolyInterface;
+﻿using Monopoly;
 
 class Program 
 {
 	static void Main(string[] args)
 	{
+		Console.WriteLine("==== Welcome to Monopoly Game! ====");
+		
 		Player player = new Player(115, "Sesil");
 		Console.WriteLine(player.GetId());
 		Console.WriteLine(player.GetName());
