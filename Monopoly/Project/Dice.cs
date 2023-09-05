@@ -11,10 +11,8 @@ public class Dice : IDice
 	
 	public int Roll()
 	{
-		var _random = new Random();
-		int res1 = _random.Next(1, 7);
-		int res2 = _random.Next(1, 7);
-		int total = res1 + res2;
-		return total;
+		Random randRoll = new Random();
+		int resultDice = randRoll.Next(1,7);
+		return resultDice;
 	}
 }

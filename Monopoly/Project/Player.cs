@@ -1,13 +1,13 @@
 using Monopoly;
-
+using System;
 public class Player : IPlayer 
 {
 	private string _name;
 	private int _id;
 	
-	public Player(int id, string? name)
+	public Player(string? name)
 	{
-		_id = id;
+		// _id = id;
 		_name = name;
 	}
 	
@@ -28,17 +28,6 @@ public class Player : IPlayer
 	
 	public int GetId()
 	{
-		return _id;
+        return _id;
 	}
-	
-	public bool SetId(int id)
-	{
-		if(id > 0)
-		{
-			_id = id;
-			return true;
-		}
-		return false;
-	}
-	
 }

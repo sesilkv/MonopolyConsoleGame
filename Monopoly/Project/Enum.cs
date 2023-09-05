@@ -1,4 +1,4 @@
-namespace MonopolyEnum;
+namespace Monopoly;
 
 public enum GameState 
 {
@@ -19,10 +19,17 @@ public enum TileType
 	VISITING_JAIL,
 	FREE_PARKING,
 	GO_TO_JAIL,
-	LANDMARK,
 	PROPERTY,
 	UTILITY,
 	TAX
+}
+
+public enum PropertyType 
+{
+	COUNTRY,
+	STATION,
+	HARBOUR,
+	AIRPORT
 }
 
 public enum PropertySituation
