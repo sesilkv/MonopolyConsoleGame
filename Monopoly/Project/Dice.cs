@@ -12,7 +12,7 @@ public class Dice : IDice
 	public int Roll()
 	{
 		Random randRoll = new Random();
-		int resultDice = randRoll.Next(1,7);
+		int resultDice = randRoll.Next(1, _numOfSide+1);
 		return resultDice;
 	}
 }

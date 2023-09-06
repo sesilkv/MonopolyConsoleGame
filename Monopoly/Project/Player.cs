@@ -2,7 +2,7 @@ using Monopoly;
 using System;
 public class Player : IPlayer 
 {
-	private string _name;
+	private string? _name;
 	private int _id;
 	
 	public Player(string? name)

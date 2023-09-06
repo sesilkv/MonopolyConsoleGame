@@ -4,8 +4,12 @@ namespace Monopoly;
 public class Tax : Tile
 {
 	private int _paymentTax;
-	public Tax(int position, string? tileName, string? tileDescription, TileType tileType, int paymentTax) : base(position, tileName, tileDescription, tileType)
+	public Tax(int position, string? tileName, string? tileDescription, int paymentTax)
 	{
+		_tileType = TileType.TAX;
+		_tileName = tileName;
+		_position = position;
+		_tileDescription = tileDescription;
 		_paymentTax = paymentTax;
 	}
 

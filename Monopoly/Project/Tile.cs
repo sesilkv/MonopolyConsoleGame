@@ -4,10 +4,10 @@ namespace Monopoly
 {
 	public abstract class Tile
 	{
-		private int _position;
-		private string? _tileName;
-		private string? _tileDescription;
-		private TileType _tileType;
+		protected int _position;
+		protected string? _tileName;
+		protected string? _tileDescription;
+		protected TileType _tileType;
 		
 		public int Position { get => _position; set => _position = value; }
 		public string? TileName { get => _tileName; set => _tileName = value; }

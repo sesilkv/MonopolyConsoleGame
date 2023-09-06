@@ -2,15 +2,23 @@ namespace Monopoly;
 
 public enum GameState 
 {
-	WIN,
-	BANKRUPT,
-	ALIVE
+	NOT_STARTED,
+	IN_PROGRESS,
+	FINISHED
 }
 
 public enum TypeCard 
 {
 	CHANCE,
 	COMMUNITY_CHEST
+}
+
+public enum CardDesc
+{
+	GET_OUT_OF_JAIL,
+	MOVE,
+	PAY,
+	RECEIVE_MONEY //Dictionary<enum, delegate>
 }
 
 public enum TileType 
@@ -21,7 +29,9 @@ public enum TileType
 	GO_TO_JAIL,
 	PROPERTY,
 	UTILITY,
-	TAX
+	TAX,
+	CHANCE,
+	COMMUNITY_CHEST
 }
 
 public enum PropertyType 
@@ -34,7 +44,7 @@ public enum PropertyType
 
 public enum PropertySituation
 {
-	Unowned,
-	Owned,
-	Mortgaged
+	UNOWNED,
+	OWNED,
+	MORTGAGED
 }
