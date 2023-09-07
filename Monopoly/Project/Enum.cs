@@ -7,7 +7,7 @@ public enum GameState
 	FINISHED
 }
 
-public enum TypeCard 
+public enum CardType 
 {
 	CHANCE,
 	COMMUNITY_CHEST
@@ -45,6 +45,12 @@ public enum PropertyType
 public enum PropertySituation
 {
 	UNOWNED,
-	OWNED,
-	MORTGAGED
+	OWNED
+}
+
+public enum PurchasePropertyState
+{
+	SUCCESS,
+	ALREADY_OWNED,
+	NOT_ENOUGH_MONEY
 }

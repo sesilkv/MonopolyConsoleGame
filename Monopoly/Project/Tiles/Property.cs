@@ -5,9 +5,11 @@ public class Property : Tile
 	private PropertyType _propType;
 	private int _priceProp;
 	private int _rentProp;
+	private int _housePrice;
 	private string? _ownerProp;
+	private int _numberOfHouse;
 	private PropertySituation _propSituation;
-	public Property(int position, string? tileName, string? tileDescription, int priceProp, int rentProp, PropertyType propType) 
+	public Property(int position, string? tileName, string? tileDescription, int priceProp, int rentProp, int housePrice, PropertyType propType) 
 	{
 		_tileType = TileType.PROPERTY;
 		_tileName = tileName;
@@ -16,6 +18,8 @@ public class Property : Tile
 		_propType = propType;
 		_priceProp = priceProp;
 		_rentProp = rentProp;
+		_housePrice = housePrice;
+		_numberOfHouse = 0;
 		_ownerProp = null;
 		_propSituation = PropertySituation.UNOWNED;
 	}
@@ -38,11 +42,23 @@ public class Property : Tile
 		set { _rentProp = value; }
 	}
 	public PropertySituation PropSituation { get => _propSituation; set => _propSituation = value; }
-	
-	public string GetOwner()
-	{
-		return _ownerProp;
+	public int NumberOfHouse { get => _numberOfHouse; }
+	public int HousePrice 
+	{ 
+		get => _housePrice; 
 	}
+	
+	public void AddHouse()
+	{
+		_numberOfHouse++;
+	}
+	
+	public void RemoveHouse()
+	{
+		_numberOfHouse--;
+	}
+	
+	public string Owner { get => _ownerProp; }
 	
 	public void SetOwner(string owner)
 	{

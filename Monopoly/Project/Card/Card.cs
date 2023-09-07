@@ -2,19 +2,19 @@ namespace Monopoly;
 
 public class Card : Tile
 {
-	private TypeCard _typeCard; // enum
+	private CardType _typeCard; // enum
 	private int _cardDesc;
 
-	public TypeCard TypeCard { get => _typeCard; set => _typeCard = value; }
+	public CardType TypeCard { get => _typeCard; set => _typeCard = value; }
 	public int CardDesc { get => _cardDesc; set => _cardDesc = value; }
 
-	public Card(int position, TypeCard typeCard) : base(position)
+	public Card(int position, CardType typeCard) : base(position)
 	{
 		// position = position;
 		_typeCard = typeCard;
 	}
 
-	public Card(TypeCard typeCard, int position) : base(position)
+	public Card(CardType typeCard, int position) : base(position)
 	{
 	}
 

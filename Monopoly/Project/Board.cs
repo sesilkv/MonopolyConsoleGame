@@ -15,51 +15,50 @@ namespace Monopoly
 		public List<Tile> Tile { get => _tile; set => _tile = value; }
 
 		public void CreateBoard()
-		{
-			// CardFactory chanceCard = new CardFactory(TypeCard.CHANCE);
-			// CardFactory communityCard = new CardFactory(TypeCard.COMMUNITY_CHEST);
-			
-			List<Tile> tile = new List<Tile>();
-			tile.Add(new Go(1, "Go!", "Starting point of the board", 200));
-			tile.Add(new Property(2, "Indonesia", "Welcome to Indonesia!", 150, 50, PropertyType.COUNTRY));
-			tile.Add(new CommunityChest(3, "Community Chest", "Please take a community card"));
-			tile.Add(new Property(4, "Malaysia", "Welcome to Malaysia!", 150, 50, PropertyType.COUNTRY));
-			tile.Add(new Tax(5, "Tax 1", "You should pay the tax $100!", 100));
-			tile.Add(new Property(6, "Changi Airport", "You just land on airport.", PropertyType.AIRPORT));
-			tile.Add(new Property(7, "Singapore", "Welcome to Singapore!", 200, 100, PropertyType.COUNTRY));
-			tile.Add(new Chance(8, "Chance", "Please take a chance card")); 
-			tile.Add(new Property(9, "Hongkong", "Welcome to Hongkong!", 200, 100, PropertyType.COUNTRY));
-			tile.Add(new Property(10, "Taiwan", "Welcome to Taiwan!", 200, 100, PropertyType.COUNTRY));
-			tile.Add(new VisitingJail(11, "Visiting Jail", "You just visiting the jail."));
-			tile.Add(new Property(12, "Philipina", "Welcome to Philipina!", 200, 100, PropertyType.COUNTRY));
-			tile.Add(new Utility(13, "Electric Company", ""));
-			tile.Add(new Property(14, "Thailand", "Welcome to Thailand!", 200, 70, PropertyType.COUNTRY));
-			tile.Add(new Property(15, "Vietnam", "Welcome to Vietnam!", 200, 70, PropertyType.COUNTRY));
-			tile.Add(new Property(16, "Tokyo Station", "You just arrived at the station.", 100, 50, PropertyType.STATION));
-			tile.Add(new Property(17, "Japan", "Welcome to Japan!", 250, 100, PropertyType.COUNTRY));
-			tile.Add(new CommunityChest(18, "Community Chest", "Please take a community card"));
-			tile.Add(new Property(19, "Korea", "Welcome to Korea!", 250, 100, PropertyType.COUNTRY));
-			tile.Add(new Property(20, "India", "Welcome to India!", 100, 25, PropertyType.COUNTRY));
-			tile.Add(new FreeParking(21, "Free Parking", ""));
-			tile.Add(new Property(22, "China", "Welcome to China!", 250, 100, PropertyType.COUNTRY));
-			tile.Add(new Chance(23, "Chance", "Please take a chance card")); 
-			tile.Add(new Property(24, "Uni Soviet", "Welcome to Uni Soviet!", 300, 120, PropertyType.COUNTRY));
-			tile.Add(new Property(25, "Italia", "Welcome to Italia!", 300, 120, PropertyType.COUNTRY));
-			tile.Add(new Property(26, "London Station", "You just arrived at the station.", 100, 50, PropertyType.STATION));
-			tile.Add(new Property(27, "England", "Welcome to England!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new Property(28, "France", "Welcome to France!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new Utility(29, "Water Works", ""));
-			tile.Add(new Property(30, "Netherlands", "Welcome to Netherlands!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new GoToJail(31, "Go To Jail", ""));
-			tile.Add(new Property(32, "Canada", "Welcome to Canada!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new Property(33, "USA", "Welcome to USA!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new CommunityChest(34, "Community Chest", "Please take a community card"));
-			tile.Add(new Property(35, "Brazil", "Welcome to Brazil!", 300, 125, PropertyType.COUNTRY));
-			tile.Add(new Property(36, "Sydney Harbour", "You just arrived at the harbour.", 100, 50, PropertyType.HARBOUR));
-			tile.Add(new Chance(37, "Chance", "Please take a chance card")); 
-			tile.Add(new Property(38, "Australia", "Welcome to Australia!", 200, 100, PropertyType.COUNTRY));
-			tile.Add(new Tax(39, "Tax 2", "You should pay the tax $200!", 200));
-			tile.Add(new Property(40, "Africa", "Welcome to Africa!", 150, 60, PropertyType.COUNTRY));
+		{			
+			_tile = new List<Tile>
+            {
+                new Go(0, "Go!", "Starting point of the board", 200),
+                new Property(1, "Indonesia", "Welcome to Indonesia", 150, 50, 25, PropertyType.COUNTRY),
+                new CommunityChest(2, "Community Chest", "Please take a community card"),
+                new Property(3, "Malaysia", "Welcome to Malaysia", 150, 50, 25, PropertyType.COUNTRY),
+                new Tax(4, "Tax 1", "You should pay the tax $100", 100),
+                new Property(5, "Changi Airport", "You just land on airport", PropertyType.AIRPORT),
+                new Property(6, "Singapore", "Welcome to Singapore", 200, 100, 25, PropertyType.COUNTRY),
+                new Chance(7, "Chance", "Please take a chance card"),
+                new Property(8, "Hongkong", "Welcome to Hongkong", 200, 100, 25, PropertyType.COUNTRY),
+                new Property(9, "Taiwan", "Welcome to Taiwan", 200, 100, 25, PropertyType.COUNTRY),
+                new VisitingJail(10, "Visiting Jail", "You just visiting the jail"),
+                new Property(11, "Philipina", "Welcome to Philipina", 200, 100, 25, PropertyType.COUNTRY),
+                new Utility(12, "Electric Company", "Pay the amount"),
+                new Property(13, "Thailand", "Welcome to Thailand", 200, 70, 25, PropertyType.COUNTRY),
+                new Property(14, "Vietnam", "Welcome to Vietnam", 200, 70, 25, PropertyType.COUNTRY),
+                new Property(15, "Tokyo Station", "You just arrived at the station", 100, 50, 25, PropertyType.STATION),
+                new Property(16, "Japan", "Welcome to Japan", 250, 100, 25, PropertyType.COUNTRY),
+                new CommunityChest(17, "Community Chest", "Please take a community card"),
+                new Property(18, "Korea", "Welcome to Korea", 250, 100, 25, PropertyType.COUNTRY),
+                new Property(19, "India", "Welcome to India", 100, 25,25, PropertyType.COUNTRY),
+                new FreeParking(20, "Free Parking", "You can choose any place"),
+                new Property(21, "China", "Welcome to China", 250, 100, 25, PropertyType.COUNTRY),
+                new Chance(22, "Chance", "Please take a chance card"),
+                new Property(23, "Uni Soviet", "Welcome to Uni Soviet", 300, 120, 25, PropertyType.COUNTRY),
+                new Property(24, "Italia", "Welcome to Italia", 300, 120, 25, PropertyType.COUNTRY),
+                new Property(25, "London Station", "You just arrived at the station", 100, 50, 25, PropertyType.STATION),
+                new Property(26, "England", "Welcome to England", 300, 125, 25, PropertyType.COUNTRY),
+                new Property(27, "France", "Welcome to France", 300, 125, 25, PropertyType.COUNTRY),
+                new Utility(28, "Water Works", "Pay the amount"),
+                new Property(29, "Netherlands", "Welcome to Netherlands", 300, 125, 25, PropertyType.COUNTRY),
+                new GoToJail(30, "Go To Jail", "Sorry, you must go to jail", 100),
+                new Property(31, "Canada", "Welcome to Canada", 300, 125, 25, PropertyType.COUNTRY),
+                new Property(32, "USA", "Welcome to USA", 300, 125, 25, PropertyType.COUNTRY),
+                new CommunityChest(33, "Community Chest", "Please take a community card"),
+                new Property(34, "Brazil", "Welcome to Brazil", 300, 125, 25, PropertyType.COUNTRY),
+                new Property(35, "Sydney Harbour", "You just arrived at the harbour", 100, 50, 25, PropertyType.HARBOUR),
+                new Chance(36, "Chance", "Please take a chance card"),
+                new Property(37, "Australia", "Welcome to Australia", 200, 100, 25, PropertyType.COUNTRY),
+                new Tax(38, "Tax 2", "You should pay the tax $200", 200),
+                new Property(39, "Africa", "Welcome to Africa", 150, 60, 25, PropertyType.COUNTRY)
+            };
 			
 		}
 		
