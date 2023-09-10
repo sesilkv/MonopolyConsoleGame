@@ -20,14 +20,14 @@ public class Game
 	private GameController _gameController;
 	// private List<IPlayer> players = new List<IPlayer>();
 	private bool _finishTurn;
-	private Player activePlayer;
+	private Player _activePlayer;
 	private List<Menu> _menuDesc;
 
 	public Game()
 	{
 		Board board = new Board();
 		_gameController = new GameController(board);
-		activePlayer = _gameController.ActivePlayer();
+		_activePlayer = _gameController.ActivePlayer();
 		_gameController.AddDice(6);
 		_gameController.AddDice(6);
 	}
@@ -35,6 +35,8 @@ public class Game
 	public void StartGame()
 	{
 		Console.Clear();
+		
+		_gameController.PlayerNotified += HandleNotification;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
 
 		// PLAYER
@@ -182,7 +184,7 @@ public class Game
 
 								if (_gameController.GetOutOfJail())
 								{
-									Console.WriteLine("Congrats! You rolled doubles and you can get out of jail.");
+									Console.WriteLine("Congrats! You rolled doubles and you can get out from jail.");
 									_gameController.Move();
 									break;
 								}
@@ -212,9 +214,10 @@ public class Game
 					}
 					else
 					{
-						Console.WriteLine("Invalid input. Please enter a valid option number.");
+						Console.WriteLine("Please enter a valid number.");
 					}
 				}
+				Console.Clear();
 
 				Menu selectedMenu = _menuDesc[option - 1];
 				selectedMenu.Action.Invoke();
@@ -238,16 +241,16 @@ public class Game
 			_menuDesc.Add(new Menu { NameMenu = "Buy House", Action = StateBuyHouse });
 		}
 
-		_menuDesc.Add(new Menu { NameMenu = "Quit Game", Action = QuitGame });
+		_menuDesc.Add(new Menu { NameMenu = "Quit Game", Action = () => QuitGame() });
 		return _menuDesc;
 	}
 
-	private void ShowMenu()
+	public void ShowMenu()
 	{
 		Console.WriteLine("\n======= M E N U =======");
 		for (int x = 0; x < _menuDesc.Count; x++)
 		{
-			if (!_gameController.Jailed().Contains(activePlayer) || x == 0)
+			if (!_gameController.Jailed().Contains(_activePlayer) || x == 0)
 			{
 				Console.WriteLine($"{x + 1}. {_menuDesc[x].NameMenu}");
 			}
@@ -280,23 +283,28 @@ public class Game
 	
 	public void PurchaseProperty()
 	{
-		PurchasePropertyState propState = _gameController.BuyProperty();
+		PropState propState = _gameController.BuyProperty();
 		
 		switch (propState)
 		{
-			case PurchasePropertyState.SUCCESS:
-				Console.WriteLine("Property successfully purchased!");
+			case PropState.SUCCESS:
+				Console.WriteLine("Successfully purchased!");
 				break;
-			case PurchasePropertyState.ALREADY_OWNED:
+			case PropState.ALREADY_OWNED:
 				Console.WriteLine("Sorry, the property is already owned by another player.");
 				break;
-			case PurchasePropertyState.NOT_ENOUGH_MONEY:
+			case PropState.NOT_ENOUGH_MONEY:
 				Console.WriteLine("Sorry, you don't have enough money.");
 				break;
 			default:
 				Console.WriteLine("Error. You cannot purchasing the property.");
 				break;
 		}
+	}
+	
+	public void HandleNotification(string message, string playerName)
+	{
+		Console.WriteLine($"{message}, {playerName}");
 	}
 
 	public void StateSellProperty()
@@ -331,9 +339,14 @@ public class Game
 		_gameController.SwitchTurn();
 	}
 
-	public void QuitGame()
+	public async Task QuitGame()
 	{
-		_gameController.SetGameState(GameState.FINISHED);
+		// _gameController.SetGameState(GameState.FINISHED);
+		Console.Clear();
+		await Task.Delay(1000);
+		Console.WriteLine("......Exiting the game......");
+		Console.WriteLine("Thanks for playing Monopoly!\n");
+		Environment.Exit(0);
 	}
 }
 

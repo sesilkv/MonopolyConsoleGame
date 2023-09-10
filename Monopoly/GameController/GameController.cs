@@ -12,11 +12,14 @@ class GameController
 	private Dictionary<IPlayer, int> _playerCash;
 	private Dictionary<IPlayer, bool> _jailOrNot;
 	private Dictionary<IPlayer, List<Property>> _playerProp;
+	// private Dictionary<IPlayer, PlayerData> _playerData;
 	private List<Card> _playerCards;
-	private List<IDice> _diceList = new List<IDice>();
+	private List<IDice> _diceList;
 	private List<int> _totalDice;
 	private bool _finishTurn;
 	public event Action<IPlayer> MoveToJailEvent;
+	public delegate void PlayerNotificationHandler(string message, string playerName);
+	public event PlayerNotificationHandler PlayerNotified;
 
 	public GameController(Board board)
 	{
@@ -56,7 +59,7 @@ class GameController
 		Player player = new Player(name);
 		_players.Add(player);
 		_playerPos[player] = _board.GetTile(0);
-		_playerCash[player] = 2000;
+		_playerCash[player] = 10000;
 		_jailOrNot[player] = false;
 	}
 
@@ -118,15 +121,44 @@ class GameController
 		}
 	}
 
-	public bool Roll()
+	public int Roll()
 	{
+		_totalDice.Clear();
 		int result = 0;
 		foreach (var dice in _diceList)
 		{
 			result = dice.Roll();
 			_totalDice.Add(result);
 		}
-		return true;
+		return result;
+	}
+	
+	// public int Roll()
+	// {
+	// 	_totalDice.Clear();
+	// 	int resDice = 0;
+	// 	foreach (var dice in _diceList)
+	// 	{
+	// 		int result = dice.Roll();
+	// 		resDice += result;
+	// 	}
+
+	// 	_totalDice.Add(resDice);
+	// 	return resDice;
+	// }
+
+	// overload Roll
+	public int Roll(int x)
+	{
+		List<Dice> _diceList = new List<Dice>();
+		if (x >= 0 && x < _diceList.Count)
+		{
+			return _diceList[x].Roll();
+		}
+		else
+		{
+			throw new ArgumentException("Invalid dice index.");
+		}
 	}
 
 	public int TotalDice()
@@ -143,33 +175,6 @@ class GameController
 	{
 		return _totalDice;
 	}
-
-	// overload Roll
-	// public int Roll()
-	// {
-	// 	int tot = 0;
-	// 	foreach (var dice in _diceList)
-	// 	{
-	// 		int result = dice.Roll();
-	// 		tot += result;
-	// 	}
-
-	// 	_totalDice.Add(tot);
-	// 	return tot;
-	// }
-
-	// public int Roll(int x)
-	// {
-	// 	List<Dice> _diceList = new List<Dice>();
-	// 	if (x >= 0 && x < _diceList.Count)
-	// 	{
-	// 		return _diceList[x].Roll();
-	// 	}
-	// 	else
-	// 	{
-	// 		throw new ArgumentException("Invalid dice index.");
-	// 	}
-	// }
 
 	public List<IDice> GetAllDice()
 	{
@@ -288,17 +293,21 @@ class GameController
 	{
 		switch (tile)
 		{
-			case GoToJail jailed:
-				MoveToJail();
-			break;
-			break;
+			case Tax taxTile:
+				PayTax(taxTile);
+				break;
+			case Utility utilityTile:
+				PayUtility(utilityTile);
+				break;
+			default:
+				break;
 		}
 	}
 
 	public void MoveToJail()
 	{
 		Player activePlayer = ActivePlayer();
-		GoToJail jailTile = GetJailTile();
+		Jail jailTile = GetJailTile();
 
 		if (activePlayer != null && jailTile != null)
 		{
@@ -343,7 +352,7 @@ class GameController
 		Player activePlayer = ActivePlayer();
 		if (activePlayer != null && _jailOrNot.ContainsKey(activePlayer))
 		{
-			GoToJail jailTile = GetJailTile();
+			Jail jailTile = GetJailTile();
 			
 			if (jailTile != null)
 			{
@@ -360,19 +369,59 @@ class GameController
 		return false;
 	}
 
-	public GoToJail GetJailTile()
+	public Jail GetJailTile()
 	{
 		for (int pos = 0; pos < _board.GetTileAll(); pos++)
 		{
 			Tile tile = _board.GetTile(pos);
-			if (tile is GoToJail jailTile)
+			if (tile is Jail jailTile)
 			{
 				return jailTile;
 			}
 		}
 		return null;
 	}
-	
+
+	public void NotifyPlayer(string message, string playerName)
+	{
+		PlayerNotified?.Invoke(message, playerName);
+	}
+
+
+	public TaxUtilityState PayTax(Tile tile)
+	{
+		Player activePlayer = ActivePlayer();
+		if(tile is Tax taxTile)
+		{
+			int taxAmount = taxTile.PayTax;
+			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= taxAmount)
+			{
+				_playerCash[activePlayer] -= taxAmount;
+				NotifyPlayer("You have successfully paid the tax", activePlayer.GetName());
+				return TaxUtilityState.SUCCESS;
+			}
+		}
+		NotifyPlayer("You don't have enough money to pay the tax", activePlayer.GetName());
+		return TaxUtilityState.NOT_ENOUGH_MONEY;
+	}
+
+	public TaxUtilityState PayUtility(Tile tile)
+	{
+		Player activePlayer = ActivePlayer();
+		if(tile is Utility utilityTile)
+		{
+			int utilityAmount = utilityTile.PayUtility;
+			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= utilityAmount)
+			{
+				_playerCash[activePlayer] -= utilityAmount;
+				NotifyPlayer("You have successfully paid the utility", activePlayer.GetName());
+				return TaxUtilityState.SUCCESS;
+			}
+		}
+		NotifyPlayer("You don't have enough money to pay the utility", activePlayer.GetName());
+		return TaxUtilityState.NOT_ENOUGH_MONEY;
+	}
+
 	public List<Property> PlayerProperty()
 	{
 		Player activePlayer = ActivePlayer();
@@ -383,7 +432,7 @@ class GameController
 		return new List<Property>();
 	}
 
-	public PurchasePropertyState BuyProperty()
+	public PropState BuyProperty()
 	{
 		Player activePlayer = ActivePlayer();
 		int currPos = GetPlayerPosition();
@@ -394,7 +443,7 @@ class GameController
 
 			if (!(currTile is Property prop) || prop.Owner != null)
 			{
-				return PurchasePropertyState.ALREADY_OWNED;
+				return PropState.ALREADY_OWNED;
 			}
 
 			int startPos = _board.GetTile(0).Position;
@@ -404,7 +453,7 @@ class GameController
 			int stepsPassed = (currPos - startPos + totalSteps) % numOfTile;
 			if (stepsPassed <= totalSteps)
 			{
-				return PurchasePropertyState.ALREADY_OWNED;
+				return PropState.ALREADY_OWNED;
 			}
 
 			int propertyPrice = prop.PriceProp;
@@ -419,14 +468,13 @@ class GameController
 					_playerProp[activePlayer] = new List<Property>();
 				}
 				_playerProp[activePlayer].Add(prop);
-
 			}
 			else
 			{
-				return PurchasePropertyState.NOT_ENOUGH_MONEY;
+				return PropState.NOT_ENOUGH_MONEY;
 			}
 		}
-		return PurchasePropertyState.SUCCESS;
+		return PropState.SUCCESS;
 	}
 	
 	public bool SellProperty()
@@ -510,21 +558,9 @@ class GameController
 		}
 	}
 	
-	
-	// Tax()
+
 	// RandomChanceCard()
 	// RandomCommunityChestCard()
 	// IsWinner() bool bankrupt
 	// EndGame()
-
-	// public void RollDice(Player player)
-	// {
-	// 	List<int> rollResults = new List<int>();
-	// 	foreach (var dice in _diceList)
-	// 	{
-	// 		int rollResult = dice.Roll();
-	// 		rollResults.Add(rollResult);
-	// 	}
-	// 	DiceRolled?.Invoke(player, rollResults);
-	// }
 }

@@ -2,11 +2,11 @@ namespace Monopoly;
 
 // CORNER TILE
 // get out of jail: roll doubles, get oute free card, pay the fine $50
-public class GoToJail : Tile
+public class Jail : Tile
 {
 	private int _payJail;
 	public int PayJail { get { return _payJail;} }
-	public GoToJail(int position, string? tileName, string? tileDescription, int payJail)
+	public Jail(int position, string? tileName, string? tileDescription, int payJail)
 	{
 		_tileType = TileType.GO_TO_JAIL;
 		_tileName = tileName;

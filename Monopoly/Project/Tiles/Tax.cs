@@ -3,15 +3,15 @@ namespace Monopoly;
 // TAX
 public class Tax : Tile
 {
-	private int _paymentTax;
-	public Tax(int position, string? tileName, string? tileDescription, int paymentTax)
+	private int _payTax;
+	public Tax(int position, string? tileName, string? tileDescription, int payTax)
 	{
 		_tileType = TileType.TAX;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;
-		_paymentTax = paymentTax;
+		_payTax = payTax;
 	}
 
-	public int PaymentTax { get => _paymentTax; set => _paymentTax = value; }
+	public int PayTax { get => _payTax; set => _payTax = value; }
 }
