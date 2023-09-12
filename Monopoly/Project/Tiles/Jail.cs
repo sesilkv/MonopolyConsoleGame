@@ -5,10 +5,10 @@ namespace Monopoly;
 public class Jail : Tile
 {
 	private int _payJail;
-	public int PayJail { get { return _payJail;} }
+	public int PayJail { get { return _payJail; } }
 	public Jail(int position, string? tileName, string? tileDescription, int payJail)
 	{
-		_tileType = TileType.GO_TO_JAIL;
+		_tileType = TileType.GoToJail;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;

@@ -2,63 +2,64 @@ namespace Monopoly;
 
 public enum GameState 
 {
-	NOT_STARTED,
-	IN_PROGRESS,
-	FINISHED
+	NotStarted,
+	InProgress,
+	Finished
 }
 
 public enum CardType 
 {
-	CHANCE,
-	COMMUNITY_CHEST
+	Chance,
+	CommunityChest
 }
 
 public enum CardDesc
 {
-	GET_OUT_OF_JAIL,
-	MOVE,
-	PAY,
-	RECEIVE_MONEY //Dictionary<enum, delegate>
+	GetOutOfJail,
+	Move,
+	Pay,
+	ReceiveMoney //Dictionary<enum, delegate>
 }
 
 public enum TileType 
 {
-	GO,
-	VISITING_JAIL,
-	FREE_PARKING,
-	GO_TO_JAIL,
-	PROPERTY,
-	UTILITY,
-	TAX,
-	CHANCE,
-	COMMUNITY_CHEST
+	Go,
+	VisitingJail,
+	FreeParking,
+	GoToJail,
+	Property,
+	Utility,
+	Tax,
+	Chance,
+	CommunityChest
 }
 
 public enum PropertyType 
 {
-	COUNTRY,
-	STATION,
-	HARBOUR,
-	AIRPORT
+	Country,
+	Station,
+	Harbour,
+	Airport
 }
 
 public enum PropertySituation
 {
-	UNOWNED,
-	OWNED
+	Unowned,
+	Owned
 }
 
 public enum PropState
 {
-	SUCCESS,
-	ALREADY_OWNED,
-	NOT_ENOUGH_MONEY
+	Success,
+	AlreadyOwned,
+	NotEnoughMoney,
+	NotProperty
 }
 
 public enum TaxUtilityState
 {
-	SUCCESS,
-	NOT_ENOUGH_MONEY
+	Success,
+	NotEnoughMoney
 }
 
 // public PurchaseState BuyProperty()

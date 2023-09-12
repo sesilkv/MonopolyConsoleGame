@@ -4,10 +4,10 @@ namespace Monopoly;
 public class Go : Tile
 {
 	private int _amountStart;
-	public int GetAmount { get { return _amountStart; } }
+	public int AmountStart { get { return _amountStart; } }
 	public Go(int position, string? tileName, string? tileDescription, int amountStart)
 	{
-		_tileType = TileType.GO;
+		_tileType = TileType.Go;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;

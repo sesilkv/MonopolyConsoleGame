@@ -11,7 +11,8 @@ public class Property : Tile
 	private PropertySituation _propSituation;
 	public Property(int position, string? tileName, string? tileDescription, int priceProp, int rentProp, int housePrice, PropertyType propType) 
 	{
-		_tileType = TileType.PROPERTY;
+		// pay rent dynamic
+		_tileType = TileType.Property;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;
@@ -21,13 +22,13 @@ public class Property : Tile
 		_housePrice = housePrice;
 		_numberOfHouse = 0;
 		_ownerProp = null;
-		_propSituation = PropertySituation.UNOWNED;
+		_propSituation = PropertySituation.Unowned;
 	}
 	
 	// for airport, safe space
 	public Property(int position, string? tileName, string? tileDescription, PropertyType propType)
 	{
-		_tileType = TileType.PROPERTY;
+		_tileType = TileType.Property;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;
@@ -63,7 +64,7 @@ public class Property : Tile
 	public void SetOwner(string owner)
 	{
 		_ownerProp = owner;
-		_propSituation = PropertySituation.OWNED;
+		_propSituation = PropertySituation.Owned;
 	}
 		
 	

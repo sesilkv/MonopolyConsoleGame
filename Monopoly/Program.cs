@@ -20,7 +20,7 @@ public class Game
 	private GameController _gameController;
 	// private List<IPlayer> players = new List<IPlayer>();
 	private bool _finishTurn;
-	private Player _activePlayer;
+	private IPlayer _activePlayer;
 	private List<Menu> _menuDesc;
 
 	public Game()
@@ -34,9 +34,9 @@ public class Game
 
 	public void StartGame()
 	{
-		Console.Clear();
-		
+		// Console.Clear();
 		_gameController.PlayerNotified += HandleNotification;
+		// _gameController.PlayerNotifiedJail += JailNotification;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
 
 		// PLAYER
@@ -86,10 +86,10 @@ public class Game
 		Console.WriteLine("The game is starting!\n");
 		Console.ReadKey();
 
-		while (_gameController.GetGameState() == GameState.IN_PROGRESS || _gameController.GetGameState() == GameState.NOT_STARTED)
+		while (_gameController.GetGameState() == GameState.InProgress || _gameController.GetGameState() == GameState.NotStarted)
 		{
-			Player activePlayer = _gameController.ActivePlayer();
-			Console.WriteLine($"=== {activePlayer.GetName()}'s Turn ===");
+			IPlayer activePlayer = _gameController.ActivePlayer();
+			Console.WriteLine($"======= {activePlayer.GetName()}'s Turn =======");
 			Console.WriteLine("Press Any Key to Roll the Dice!\n");
 			Console.ReadKey();
 
@@ -126,6 +126,7 @@ public class Game
 			Console.WriteLine($"{activePlayer.GetName()}'s position: {_gameController.GetPlayerPosition()}");
 			Console.WriteLine($"Tile name: {_gameController.TileName()} \n");
 			Console.WriteLine($"{_gameController.TileDescription()}, {activePlayer.GetName()}!\n");
+			
 
 			Console.ReadKey();
 			_finishTurn = false;
@@ -182,7 +183,7 @@ public class Game
 								Console.WriteLine($"Dice 1: {totalDice[0]}");
 								Console.WriteLine($"Dice 2: {totalDice[1]}");
 
-								if (_gameController.GetOutOfJail())
+								if (_gameController.GetOutOfJailByDice())
 								{
 									Console.WriteLine("Congrats! You rolled doubles and you can get out from jail.");
 									_gameController.Move();
@@ -247,6 +248,7 @@ public class Game
 
 	public void ShowMenu()
 	{
+		// Console.Clear();
 		Console.WriteLine("\n======= M E N U =======");
 		for (int x = 0; x < _menuDesc.Count; x++)
 		{
@@ -262,16 +264,17 @@ public class Game
 	{
 		Console.Clear();
 		List<Property> playerProp = _gameController.PlayerProperty();
-		Player activePlayer = _gameController.ActivePlayer();
+		IPlayer activePlayer = _gameController.ActivePlayer();
 		Console.WriteLine($"{activePlayer.GetName()}'s position: {_gameController.TileName()}");
 		Console.WriteLine($"{activePlayer.GetName()}'s Money: {_gameController.MoneyPlayer()}");
 		Console.WriteLine($"{activePlayer.GetName()}'s properties are: ");
+	
 		if (playerProp.Count > 0)
 		{
 			foreach (var prop in playerProp)
 			{
 				Console.WriteLine($"- {prop.TileName}");
-				Console.WriteLine($"Total House: {_gameController.PlayerHouse()}");
+				Console.WriteLine($"Total House: {prop.NumberOfHouse}");
 			}
 		}
 		else
@@ -287,14 +290,17 @@ public class Game
 		
 		switch (propState)
 		{
-			case PropState.SUCCESS:
+			case PropState.Success:
 				Console.WriteLine("Successfully purchased!");
 				break;
-			case PropState.ALREADY_OWNED:
+			case PropState.AlreadyOwned:
 				Console.WriteLine("Sorry, the property is already owned by another player.");
 				break;
-			case PropState.NOT_ENOUGH_MONEY:
+			case PropState.NotEnoughMoney:
 				Console.WriteLine("Sorry, you don't have enough money.");
+				break;
+			case PropState.NotProperty:
+				Console.WriteLine("Sorry, this is not a property you can buy.");
 				break;
 			default:
 				Console.WriteLine("Error. You cannot purchasing the property.");
@@ -305,6 +311,11 @@ public class Game
 	public void HandleNotification(string message, string playerName)
 	{
 		Console.WriteLine($"{message}, {playerName}");
+	}
+	
+	public void JailNotification(IPlayer player)
+	{
+		Console.WriteLine($"{player.GetName()} has been sent to jail");
 	}
 
 	public void StateSellProperty()

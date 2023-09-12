@@ -6,7 +6,7 @@ public class Utility : Tile
 	private int _payUtility;
 	public Utility(int position, string? tileName, string? tileDescription, int payUtility)
 	{
-		_tileType = TileType.UTILITY;
+		_tileType = TileType.Utility;
 		_tileName = tileName;
 		_position = position;
 		_tileDescription = tileDescription;
