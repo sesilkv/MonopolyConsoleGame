@@ -13,3 +13,5 @@ D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\refint\Mono
 D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.pdb
 D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.genruntimeconfig.cache
 D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\ref\Monopoly.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\bin\Debug\net7.0\NLog.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly\obj\Debug\net7.0\Monopoly.csproj.CopyComplete

@@ -10,15 +10,14 @@ class GameController
 	private int _currPlayer;
 	private Dictionary<IPlayer, Tile> _playerPos;
 	private Dictionary<IPlayer, int> _playerCash;
-	private Dictionary<IPlayer, bool> _jailOrNot;
 	private Dictionary<IPlayer, List<Property>> _playerProp;
-	// private Dictionary<IPlayer, int> _playerHouses;
-	// private Dictionary<IPlayer, PlayerData> _playerData;
+	private Dictionary<IPlayer, bool> _jailOrNot;
+	private Dictionary<IPlayer, int> _jailTurn;
 	private List<Card> _playerCards;
 	private List<IDice> _diceList;
 	private List<int> _totalDice;
 	private bool _finishTurn;
-	public event Action<IPlayer> MoveToJailEvent;
+	public event Action<IPlayer> PlayerNotifiedJail;
 	
 	// for tax and utility
 	public delegate void PlayerNotificationHandler(string message, string playerName);
@@ -32,6 +31,7 @@ class GameController
 		_playerPos = new Dictionary<IPlayer, Tile>();
 		_playerCash = new Dictionary<IPlayer, int>();
 		_jailOrNot = new Dictionary<IPlayer, bool>();
+		_jailTurn = new Dictionary<IPlayer, int>();
 		_playerProp = new Dictionary<IPlayer, List<Property>>();
 		// _playerHouses = new Dictionary<IPlayer, int>();
 		_currPlayer = 0;
@@ -49,22 +49,14 @@ class GameController
 		_gameState = state;
 	}
 
-	// public void IsWinner(Player player)
-	// {
-	// 	if()
-	// 	{
-	// 		EndGame();
-	// 		SetGameState(GameState.FINISHED);
-	// 	}
-	// }
-
 	public void AddPlayer(string name)
 	{
 		Player player = new Player(name);
 		_players.Add(player);
 		_playerPos[player] = _board.GetTile(0);
-		_playerCash[player] = 2000;
+		_playerCash[player] = 10000;
 		_jailOrNot[player] = false;
+		_jailTurn[player] = 0;
 	}
 
 	public IPlayer ActivePlayer()
@@ -218,10 +210,29 @@ class GameController
 				// newPos = newPos % _board.GetTileAll();
 			}
 			
-			TileAction(newTile); //buy, rent, draw
-								 // IsWinner(ActivePlayer());
+			TileAction(newTile); //buy, rent
+			// BankruptPlayer(ActivePlayer());
 		}
 	}
+	
+	// public void BankruptPlayer(IPlayer player)
+	// {
+	// 	if(IsWinner())
+	// 	{
+	// 		EndGame();
+	// 		SetGameState(GameState.Finished);
+	// 	}
+	// }
+	
+	// public bool IsWinner()
+	// {
+		
+	// }
+	
+	// public void EndGame()
+	// {
+		
+	// }
 
 	public int GetPlayerPosition()
 	{
@@ -271,6 +282,34 @@ class GameController
 		return null;
 	}
 	
+	// overload TileName parameter inputan user
+	public string TileName(string playerName)
+	{
+		IPlayer _player = GetPlayerByName(playerName);
+		if (_player != null)
+		{
+			int _playerPos = GetPlayerPosition(_player);
+			if (_playerPos >= 0)
+			{
+				Tile tile = _board.GetTile(_playerPos);
+				return tile.TileName;
+			}
+		}
+		return null;
+	}
+
+	public IPlayer GetPlayerByName(string playerName)
+	{
+		foreach (var _player in _players)
+		{
+			if (_player.GetName() == playerName)
+			{
+				return _player;
+			}
+		}
+		return null;
+	}
+	
 	public string TileDescription()
 	{
 		IPlayer activePlayer = ActivePlayer();
@@ -283,26 +322,6 @@ class GameController
 		}
 		return null;
 	}
-	
-	// overload TileName parameter inputan user
-	// public string TileName(IPlayer player)
-	// {
-	// 	Player _player = GetPlayerByName(player);
-	// 	if (_player != null)
-	// 	{
-	// 		int _playerPos = GetPlayerPosition(_player);
-	// 		if (_playerPos >= 0){
-	// 			Tile tile = _board.GetTile();
-	// 			return tile.TileName;
-	// 		}
-	// 	}
-	// 	return null;
-	// }
-
-	// public IPlayer GetPlayerByName(IPlayer player)
-	// {
-	// 	return players.FirstOrDefault(player => player.GetName() == playerName);
-	// }
 
 	public void TileAction(Tile tile)
 	{
@@ -313,6 +332,12 @@ class GameController
 				break;
 			case Utility utilityTile:
 				PayUtility(utilityTile);
+				break;
+			case Jail:
+				MoveToJail();
+				break;
+			case Property property:
+				PayRent(property);
 				break;
 			default:
 				break;
@@ -328,12 +353,12 @@ class GameController
 		{
 			SetPlayerPosition(jailTile);
 			_jailOrNot[activePlayer] = true;
-			// _jailTurns[activePlayer] = 0;
-			MoveToJailEvent?.Invoke(activePlayer);
+			_jailTurn[activePlayer] = 0;
+			PlayerNotifiedJail?.Invoke(activePlayer);
 		}
 	}
 
-	public List<IPlayer> Jailed()
+	public List<IPlayer> JailedPlayer()
 	{
 		List<IPlayer> jailedPlayer = new List<IPlayer>();
 		foreach(var player in _jailOrNot.Keys)
@@ -355,8 +380,8 @@ class GameController
 			List<int> totDice = GetTotalDice();
 			if (totDice.Count == 2 && totDice[0] == totDice [1])
 			{
-				_jailOrNot[activePlayer] = false;
-				return true;
+				_jailOrNot[activePlayer] = false; // the player is no longer in jail
+				return true; // the player successfully got out of jail
 			}
 		}
 		return false;
@@ -375,8 +400,9 @@ class GameController
 				
 				if(_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= payJail)
 				{
-					_playerCash[activePlayer] -= payJail;
+					_playerCash[activePlayer] -= 100;
 					_jailOrNot[activePlayer] = false;
+					NotifyPlayer("Congrats, you can get out from jail", activePlayer.GetName());
 					return true;
 				}
 			}
@@ -428,12 +454,36 @@ class GameController
 			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= utilityAmount)
 			{
 				_playerCash[activePlayer] -= utilityAmount;
-				NotifyPlayer("You have successfully paid the utility $50", activePlayer.GetName());
+				NotifyPlayer("You have successfully paid the utility $100", activePlayer.GetName());
 				return TaxUtilityState.Success;
 			}
 		}
-		NotifyPlayer("You don't have enough money to pay the utility $50", activePlayer.GetName());
+		NotifyPlayer("You don't have enough money to pay the utility $100", activePlayer.GetName());
 		return TaxUtilityState.NotEnoughMoney;
+	}
+	
+	public void PayRent(Property prop)
+	{
+		IPlayer activePlayer = ActivePlayer();
+		string propOwner = prop.Owner;
+		string currPlayer = activePlayer.GetName();
+		
+		if (propOwner != null && propOwner != currPlayer)
+		{
+			int rent = prop.RentProp;
+			if (_playerCash.ContainsKey(activePlayer))
+			{
+				_playerCash[activePlayer] -= rent;
+				NotifyPlayer("Thank you for paid the rent on this country", currPlayer);
+			}
+			
+			IPlayer owner = GetPlayerByName(propOwner);
+			if(_playerCash.ContainsKey(owner))
+			{
+				_playerCash[owner] += rent;
+				NotifyPlayer($"You got rent income from {currPlayer}", propOwner);
+			}
+		} 
 	}
 
 	public List<Property> PlayerProperty()
@@ -455,27 +505,22 @@ class GameController
 		{
 			Tile currTile = _board.GetTile(currPos);
 
-			if (!(currTile is Property prop) || prop.Owner != null)
+			if (!(currTile is Property prop))
+			{
+				return PropState.NotProperty;
+			}
+			
+			if(prop.Owner != null)
 			{
 				return PropState.AlreadyOwned;
 			}
 			
-			// if (prop.PropType != PropertyType.Country)
-			// {
-			// 	return PropState.NotProperty;
-			// }
+			if (prop.PropType != PropertyType.Country)
+			{
+				return PropState.NotProperty;
+			}
 
-			// int startPos = _board.GetTile(0).Position;
-			// int numOfTile = _board.GetTileAll();
-
-			// int totalSteps = TotalDice();
-			// int stepsPassed = (currPos - startPos + totalSteps) % numOfTile;
-			// if (stepsPassed <= totalSteps)
-			// {
-			// 	return PropState.AlreadyOwned;
-			// }
-
-			int propertyPrice = prop.PriceProp;
+			int propertyPrice = prop.BuyProp;
 
 			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= propertyPrice)
 			{
@@ -496,22 +541,24 @@ class GameController
 		return PropState.Success;
 	}
 	
-	public bool SellProperty()
+	public bool SellProperty() //also the house
 	{
 		IPlayer activePlayer = ActivePlayer();
 		int currPos = GetPlayerPosition();
 		Tile currTile = _board.GetTile(currPos);
 		Property prop = currTile as Property;
+		
 		if (_playerProp.ContainsKey(activePlayer))
 		{
 			List<Property> props = _playerProp[activePlayer];
 			if (props.Contains(prop) && prop.Owner == activePlayer.GetName())
 			{
-				int propertyPrice = prop.PriceProp;
+				int propertyPrice = prop.BuyProp;
+				int housePrice = prop.HousePrice * prop.NumberOfHouse;
 
 				if (_playerCash.ContainsKey(activePlayer))
 				{
-					_playerCash[activePlayer] += propertyPrice;
+					_playerCash[activePlayer] += propertyPrice + housePrice;
 					props.Remove(prop);
 					prop.SetOwner(null);
 				}

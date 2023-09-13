@@ -3,13 +3,13 @@ namespace Monopoly;
 public class Property : Tile
 {
 	private PropertyType _propType;
-	private int _priceProp;
+	private int _buyProp;
 	private int _rentProp;
 	private int _housePrice;
 	private string? _ownerProp;
 	private int _numberOfHouse;
 	private PropertySituation _propSituation;
-	public Property(int position, string? tileName, string? tileDescription, int priceProp, int rentProp, int housePrice, PropertyType propType) 
+	public Property(int position, string? tileName, string? tileDescription, int buyProp, int housePrice, int rentProp, PropertyType propType) 
 	{
 		// pay rent dynamic
 		_tileType = TileType.Property;
@@ -17,7 +17,7 @@ public class Property : Tile
 		_position = position;
 		_tileDescription = tileDescription;
 		_propType = propType;
-		_priceProp = priceProp;
+		_buyProp = buyProp;
 		_rentProp = rentProp;
 		_housePrice = housePrice;
 		_numberOfHouse = 0;
@@ -36,7 +36,7 @@ public class Property : Tile
 	}
 
 	public PropertyType PropType { get => _propType; set => _propType = value; }
-	public int PriceProp { get => _priceProp; set => _priceProp = value; }
+	public int BuyProp { get => _buyProp; set => _buyProp = value; }
 	public int RentProp 
 	{
 		get { return _rentProp; }

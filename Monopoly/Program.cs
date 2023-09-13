@@ -36,7 +36,7 @@ public class Game
 	{
 		// Console.Clear();
 		_gameController.PlayerNotified += HandleNotification;
-		// _gameController.PlayerNotifiedJail += JailNotification;
+		_gameController.PlayerNotifiedJail += JailNotification;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
 
 		// PLAYER
@@ -59,18 +59,29 @@ public class Game
 		}
 
 		Console.Clear();
+		
+		HashSet<string> usedPlayerName = new HashSet<string>();
 		for (int x = 1; x <= totalPlayer; x++)
 		{
 			Console.WriteLine($"Username player {x}: ");
 			string inputName = Console.ReadLine();
 
-			while (string.IsNullOrEmpty(inputName))
+			while (string.IsNullOrEmpty(inputName) || usedPlayerName.Contains(inputName))
 			{
-				Console.WriteLine("Invalid input! Player name cannot be empty.");
+				if(string.IsNullOrEmpty(inputName))
+				{
+					Console.WriteLine("Invalid input! Player name cannot be empty.");
+				}
+				else 
+				{
+					Console.WriteLine("Invalid input! Player name already exists.");
+				}
+				
 				Console.WriteLine($"Username player {x}: ");
 				inputName = Console.ReadLine();
 			}
 			
+			usedPlayerName.Add(inputName);
 			inputName = char.ToUpper(inputName[0]) + inputName.Substring(1);
 			_gameController.AddPlayer(inputName);
 			Console.WriteLine("The player was successfully added.\n");
@@ -89,7 +100,7 @@ public class Game
 		while (_gameController.GetGameState() == GameState.InProgress || _gameController.GetGameState() == GameState.NotStarted)
 		{
 			IPlayer activePlayer = _gameController.ActivePlayer();
-			Console.WriteLine($"======= {activePlayer.GetName()}'s Turn =======");
+			Console.WriteLine($"========= {activePlayer.GetName()}'s Turn =========");
 			Console.WriteLine("Press Any Key to Roll the Dice!\n");
 			Console.ReadKey();
 
@@ -119,6 +130,13 @@ public class Game
 					Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
 				}
 				Console.WriteLine($"Total Dice: {total} \n");
+				
+				if (_gameController.JailedPlayer().Contains(activePlayer))
+				{
+					Console.WriteLine("You are still in jail. Cannot move.");
+					break;
+				}
+				
 				_gameController.Move();
 				Console.ReadKey();
 			}
@@ -135,11 +153,10 @@ public class Game
 				int option = 0;
 				bool isValidOption = false;
 
-				if (_gameController.Jailed().Contains(activePlayer))
+				if (_gameController.JailedPlayer().Contains(activePlayer))
 				{
-					Console.WriteLine("You are in jail.");
-					Console.WriteLine("Do you want to:");
-					Console.WriteLine("1. Pay to get out of jail");
+					Console.WriteLine("You are in jail. Choose option:");
+					Console.WriteLine("1. Pay to get out from jail");
 					Console.WriteLine("2. Roll the dice again");
 
 					while (!isValidOption)
@@ -160,12 +177,21 @@ public class Game
 						case 1:
 							if (_gameController.PayToGetOutOfJail())
 							{
+								Console.Clear();
 								Console.WriteLine("You paid to get out of jail.");
+								Console.WriteLine("Press Any Key to Roll the Dice!\n");
+								_gameController.Roll();
+								for (int x = 0; x < totalDice.Count; x++)
+								{
+									Console.WriteLine($"Dice {x + 1}: {totalDice[x]}");
+								}
+								Console.WriteLine($"Total: {total} \n");
+								Console.ReadKey();
 								_gameController.Move();
 							}
 							else
 							{
-								Console.WriteLine("You don't have enough money to pay and remain in jail.");
+								Console.WriteLine("Sorry, you don't have enough money to pay and remain in jail.");
 								_finishTurn = true;
 								_gameController.SwitchTurn();
 							}
@@ -175,16 +201,19 @@ public class Game
 
 							for (int x = 0; x < 3; x++)
 							{
+								Console.Clear();
 								Console.WriteLine($"Turn {x+1} in jail.");
-
-								Console.WriteLine("Press enter to Roll the Dice");
+								Console.WriteLine("Roll the Dice!");
 								Console.ReadKey();
 								_gameController.Roll();
 								Console.WriteLine($"Dice 1: {totalDice[0]}");
 								Console.WriteLine($"Dice 2: {totalDice[1]}");
+								
+								Console.ReadKey();
 
 								if (_gameController.GetOutOfJailByDice())
 								{
+									Console.Clear();
 									Console.WriteLine("Congrats! You rolled doubles and you can get out from jail.");
 									_gameController.Move();
 									break;
@@ -201,10 +230,13 @@ public class Game
 								}
 							}
 							break;
+						default:
+							Console.WriteLine("There's no option like that.");
+							break;
 					}
 				}
 				_menuDesc = Menu();
-				ShowMenu();
+				DisplayMenu();
 
 				while (!isValidOption)
 				{
@@ -246,13 +278,13 @@ public class Game
 		return _menuDesc;
 	}
 
-	public void ShowMenu()
+	public void DisplayMenu()
 	{
 		// Console.Clear();
 		Console.WriteLine("\n======= M E N U =======");
 		for (int x = 0; x < _menuDesc.Count; x++)
 		{
-			if (!_gameController.Jailed().Contains(_activePlayer) || x == 0)
+			if (!_gameController.JailedPlayer().Contains(_activePlayer) || x == 0)
 			{
 				Console.WriteLine($"{x + 1}. {_menuDesc[x].NameMenu}");
 			}
@@ -315,7 +347,7 @@ public class Game
 	
 	public void JailNotification(IPlayer player)
 	{
-		Console.WriteLine($"{player.GetName()} has been sent to jail");
+		Console.WriteLine($"{player.GetName()} has been sent to jail.");
 	}
 
 	public void StateSellProperty()

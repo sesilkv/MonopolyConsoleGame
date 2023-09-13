@@ -1,11 +1,52 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {}
+    "net7.0": {
+      "NLog/5.2.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "NLog/5.2.4": {
+      "sha512": "/qzds1Cp9rQD53La3mlWOmCHsFSbmT9BCb8q6k3eOrbOYDfdf3ZN1hBW7IDImUD6V8BfPfEFBhXGDLOEOQxHgQ==",
+      "type": "package",
+      "path": "nlog/5.2.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "nlog.5.2.4.nupkg.sha512",
+        "nlog.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net7.0": []
+    "net7.0": [
+      "NLog >= 5.2.4"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Kirana\\.nuget\\packages\\": {}
@@ -13,11 +54,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+      "projectUniqueName": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
       "projectName": "Monopoly",
-      "projectPath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+      "projectPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
       "packagesPath": "C:\\Users\\Kirana\\.nuget\\packages\\",
-      "outputPath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\obj\\",
+      "outputPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Kirana\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +84,12 @@
     "frameworks": {
       "net7.0": {
         "targetAlias": "net7.0",
+        "dependencies": {
+          "NLog": {
+            "target": "Package",
+            "version": "[5.2.4, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "1V+gyAYGHgEy4VHkfFTv7cbyu+1TeJRti8EJL52gPi/qfXqnAkX4JcRGsiHdRpH4SlxINaUqTp5jT1OPy0/67A==",
+  "dgSpecHash": "Wl4ij0rnop0ylRUVW82F0ACcpLZ6MQphikGVP84cNv4mp2JVw1adhJzYCjtdFbeVT5caw7DIndYAn52rKaxPyQ==",
   "success": true,
   "projectFilePath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Kirana\\.nuget\\packages\\nlog\\5.2.4\\nlog.5.2.4.nupkg.sha512"
+  ],
   "logs": []
 }
