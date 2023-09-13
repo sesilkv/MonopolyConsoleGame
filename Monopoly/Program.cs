@@ -1,4 +1,5 @@
 ﻿using Monopoly;
+using System.Linq;
 
 class Program
 {
@@ -44,7 +45,7 @@ public class Game
 		bool inputValid = false;
 		while (!inputValid || totalPlayer < 2 || totalPlayer > 4)
 		{
-			Console.WriteLine("How many players? (2-4)");
+			Console.WriteLine("\nHow many players? (2-4)");
 			inputValid = int.TryParse(Console.ReadLine(), out totalPlayer);
 
 			if (!inputValid)
@@ -70,11 +71,11 @@ public class Game
 			{
 				if(string.IsNullOrEmpty(inputName))
 				{
-					Console.WriteLine("Invalid input! Player name cannot be empty.");
+					Console.WriteLine("Invalid input! Player name cannot be empty.\n");
 				}
 				else 
 				{
-					Console.WriteLine("Invalid input! Player name already exists.");
+					Console.WriteLine("Invalid input! Player name already exists.\n");
 				}
 				
 				Console.WriteLine($"Username player {x}: ");
@@ -93,7 +94,6 @@ public class Game
 		Console.Clear();
 
 		// DICE
-		// _gameController.SetInitialState();
 		Console.WriteLine("The game is starting!\n");
 		Console.ReadKey();
 
@@ -255,6 +255,7 @@ public class Game
 				Menu selectedMenu = _menuDesc[option - 1];
 				selectedMenu.Action.Invoke();
 			}
+			
 		}
 	}
 
@@ -380,11 +381,48 @@ public class Game
 	{
 		_finishTurn = true;
 		_gameController.SwitchTurn();
+		
+		Dictionary<IPlayer, int> playerCash = _gameController.GetPlayerCash();
+		List<IPlayer> activePlayers = new List<IPlayer>();
+		List<IPlayer> playersToRemove = new List<IPlayer>();
+		
+		foreach (var kvp in playerCash)
+		{
+			IPlayer player = kvp.Key;
+			int cash = kvp.Value;
+
+			if (cash > 0)
+			{
+				activePlayers.Add(player);
+			}
+			else if (cash <= 0)
+			{
+				playersToRemove.Add(player);
+			}
+		}
+
+		// remove bankrupt player from acive player
+		foreach (var playerToRemove in playersToRemove)
+		{
+			activePlayers.Remove(playerToRemove);
+			Console.WriteLine($"{playerToRemove.GetName()} is bankrupt. Sorry, you cannot continue this game.");
+		}
+
+		if (activePlayers.Count == 1)
+		{
+			IPlayer potentialWinner = activePlayers[0];
+			Console.WriteLine($"{potentialWinner.GetName()} has won the game!");
+			_gameController.SetGameState(GameState.Finished);
+		}
+		else if (activePlayers.Count == 0)
+		{
+			Console.WriteLine("No active players left. The game is a draw.");
+			_gameController.SetGameState(GameState.Finished);
+		}
 	}
 
 	public async Task QuitGame()
 	{
-		// _gameController.SetGameState(GameState.FINISHED);
 		Console.Clear();
 		await Task.Delay(1000);
 		Console.WriteLine("......Exiting the game......");

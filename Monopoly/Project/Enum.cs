@@ -7,6 +7,12 @@ public enum GameState
 	Finished
 }
 
+public enum PlayerStatus 
+{
+	OnGoing,
+	Bankrupt
+}
+
 public enum CardType 
 {
 	Chance,

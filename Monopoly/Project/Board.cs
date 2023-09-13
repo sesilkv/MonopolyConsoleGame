@@ -34,7 +34,7 @@ namespace Monopoly
 				// new Tax(8, "Tax", "Thank you for the payment", 100),
 				// new Jail(8, "In Jail", "Sorry, you must go to jail", 100),
 				new Property(9, "Taiwan", "Welcome to Taiwan", 200, 100, 50, PropertyType.Country),
-				new VisitingJail(10, "Visiting Jail", "Jail square! But don't worry you are only visiting."),
+				new VisitingJail(10, "Visiting Jail", "Jail square! But don't worry you are only visiting"),
 				new Property(11, "Philipina", "Welcome to Philipina", 200, 100, 50, PropertyType.Country),
 				new Property(12, "New Zealand", "Welcome to New Zealand", 300, 100, 50, PropertyType.Country),
 				// new Utility(12, "Electric Company", "Thank you for the payment", 100),
@@ -48,6 +48,7 @@ namespace Monopoly
 				// new Utility(19, "Electric Company", "Thank you for the payment", 100),
 				new Jail(19, "In Jail", "Sorry, you must go to jail", 100),
 				new FreeParking(20, "Free Parking", "You can choose any place"),
+				
 				new Property(21, "China", "Welcome to China", 250, 100, 25, PropertyType.Country),
 				new Chance(22, "Chance", "Please take a chance card"),
 				new Property(23, "Uni Soviet", "Welcome to Uni Soviet", 300, 120, 25, PropertyType.Country),
@@ -93,9 +94,9 @@ namespace Monopoly
 			return _tile.Count;
 		}
 
-        internal Tile GetTile(object position)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		internal Tile GetTile(object position)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

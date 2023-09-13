@@ -19,7 +19,7 @@ class GameController
 	private bool _finishTurn;
 	public event Action<IPlayer> PlayerNotifiedJail;
 	
-	// for tax and utility
+	// notif tax, utility, amount start, winner
 	public delegate void PlayerNotificationHandler(string message, string playerName);
 	public event PlayerNotificationHandler PlayerNotified;
 
@@ -33,7 +33,6 @@ class GameController
 		_jailOrNot = new Dictionary<IPlayer, bool>();
 		_jailTurn = new Dictionary<IPlayer, int>();
 		_playerProp = new Dictionary<IPlayer, List<Property>>();
-		// _playerHouses = new Dictionary<IPlayer, int>();
 		_currPlayer = 0;
 		_diceList = new List<IDice>();
 		_totalDice = new();
@@ -54,7 +53,7 @@ class GameController
 		Player player = new Player(name);
 		_players.Add(player);
 		_playerPos[player] = _board.GetTile(0);
-		_playerCash[player] = 10000;
+		_playerCash[player] = 500;
 		_jailOrNot[player] = false;
 		_jailTurn[player] = 0;
 	}
@@ -68,6 +67,11 @@ class GameController
 			return activePlayer;
 		}
 		return null;
+	}
+
+	public Dictionary<IPlayer, int> GetPlayerCash()
+	{
+		return _playerCash;
 	}
 
 	public int CurrentPlayer()
@@ -176,11 +180,6 @@ class GameController
 		return _totalDice;
 	}
 
-	// public List<IDice> GetAllDice()
-	// {
-	// 	return _diceList;
-	// }
-
 	public void Move()
 	{
 		int steps = TotalDice();
@@ -195,7 +194,6 @@ class GameController
 			SetPlayerPosition(newTile); // set to the new tile
 			
 			// check the player passed the Go tile
-			// if(newPos > _board.GetTileAll())
 			if(newPos < currPos)
 			{
 				Go go = _board.Tile[0] as Go;
@@ -207,32 +205,11 @@ class GameController
 				}
 				
 				NotifyPlayer("You have got the amount start $200", activePlayer.GetName());
-				// newPos = newPos % _board.GetTileAll();
 			}
 			
 			TileAction(newTile); //buy, rent
-			// BankruptPlayer(ActivePlayer());
 		}
 	}
-	
-	// public void BankruptPlayer(IPlayer player)
-	// {
-	// 	if(IsWinner())
-	// 	{
-	// 		EndGame();
-	// 		SetGameState(GameState.Finished);
-	// 	}
-	// }
-	
-	// public bool IsWinner()
-	// {
-		
-	// }
-	
-	// public void EndGame()
-	// {
-		
-	// }
 
 	public int GetPlayerPosition()
 	{
@@ -470,18 +447,18 @@ class GameController
 		
 		if (propOwner != null && propOwner != currPlayer)
 		{
-			int rent = prop.RentProp;
+			int rent = prop.RentProp + (prop.HousePrice * prop.NumberOfHouse);
 			if (_playerCash.ContainsKey(activePlayer))
 			{
 				_playerCash[activePlayer] -= rent;
-				NotifyPlayer("Thank you for paid the rent on this country", currPlayer);
+				NotifyPlayer($"Thank you for paid the rent ${rent} on this country", currPlayer);
 			}
 			
 			IPlayer owner = GetPlayerByName(propOwner);
 			if(_playerCash.ContainsKey(owner))
 			{
 				_playerCash[owner] += rent;
-				NotifyPlayer($"You got rent income from {currPlayer}", propOwner);
+				NotifyPlayer($"You got rent income ${rent} from {currPlayer}", propOwner);
 			}
 		} 
 	}
