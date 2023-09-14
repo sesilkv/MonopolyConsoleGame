@@ -7,19 +7,12 @@ class Program
 	{
 		Game monopoly = new Game();
 		monopoly.StartGame();
-
-		// Dice dice = new Dice(6);
-		// int result1 = dice.Roll();
-		// Console.WriteLine(result1);
-		// int result2 = dice.Roll();
-		// Console.WriteLine(result2);
 	}
 }
 
 public class Game
 {
 	private GameController _gameController;
-	// private List<IPlayer> players = new List<IPlayer>();
 	private bool _finishTurn;
 	private IPlayer _activePlayer;
 	private List<Menu> _menuDesc;
@@ -38,16 +31,20 @@ public class Game
 		Console.Clear();
 		_gameController.PlayerNotified += HandleNotification;
 		_gameController.PlayerNotifiedJail += JailNotification;
+		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
+		Console.ReadKey();
 
 		// PLAYER
 		int totalPlayer = 0;
 		bool inputValid = false;
 		while (!inputValid || totalPlayer < 2 || totalPlayer > 4)
 		{
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("\nHow many players? (2-4)");
 			inputValid = int.TryParse(Console.ReadLine(), out totalPlayer);
 
+			Console.ForegroundColor = ConsoleColor.Red;
 			if (!inputValid)
 			{
 				Console.WriteLine("Please input a valid number!\n");
@@ -64,11 +61,13 @@ public class Game
 		HashSet<string> usedPlayerName = new HashSet<string>();
 		for (int x = 1; x <= totalPlayer; x++)
 		{
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine($"Username player {x}: ");
 			string inputName = Console.ReadLine();
 
 			while (string.IsNullOrEmpty(inputName) || usedPlayerName.Contains(inputName))
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				if(string.IsNullOrEmpty(inputName))
 				{
 					Console.WriteLine("Invalid input! Player name cannot be empty.\n");
@@ -78,6 +77,7 @@ public class Game
 					Console.WriteLine("Invalid input! Player name already exists.\n");
 				}
 				
+				Console.ForegroundColor = ConsoleColor.Yellow;
 				Console.WriteLine($"Username player {x}: ");
 				inputName = Console.ReadLine();
 			}
@@ -85,29 +85,35 @@ public class Game
 			usedPlayerName.Add(inputName);
 			inputName = char.ToUpper(inputName[0]) + inputName.Substring(1);
 			_gameController.AddPlayer(inputName);
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("The player was successfully added.\n");
 		}
 
+		Console.ForegroundColor = ConsoleColor.Blue;
 		Console.WriteLine("Press Enter to start!");
 		Console.ReadKey();
 
 		Console.Clear();
 
 		// DICE
+		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("The game is starting!\n");
 		Console.ReadKey();
 
 		while (_gameController.GetGameState() == GameState.InProgress || _gameController.GetGameState() == GameState.NotStarted)
 		{
 			IPlayer activePlayer = _gameController.ActivePlayer();
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine($"========= {activePlayer.GetName()}'s Turn =========");
+			Console.ForegroundColor = ConsoleColor.Blue;
 			Console.WriteLine("Press Any Key to Roll the Dice!\n");
 			Console.ReadKey();
 
 			_gameController.Roll();
 			List<int> totalDice = _gameController.GetTotalDice();
 			int total = _gameController.TotalDice();
-
+			
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			for (int x = 0; x < totalDice.Count; x++)
 			{
 				Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
@@ -120,17 +126,21 @@ public class Game
 			// twin dice
 			while (totalDice[0] == totalDice[1])
 			{
+				Console.ForegroundColor = ConsoleColor.Blue;
 				Console.WriteLine("Rolled double. Press Enter to rolling again!");
 				Console.ReadKey();
 				_gameController.Roll();
 				totalDice = _gameController.GetTotalDice();
 				total = _gameController.TotalDice();
+				
+				Console.ForegroundColor = ConsoleColor.Yellow;
 				for (int x = 0; x < totalDice.Count; x++)
 				{
 					Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
 				}
 				Console.WriteLine($"Total Dice: {total} \n");
 				
+				Console.ForegroundColor = ConsoleColor.Red;
 				if (_gameController.JailedPlayer().Contains(activePlayer))
 				{
 					Console.WriteLine("You are still in jail. Cannot move.");
@@ -140,7 +150,8 @@ public class Game
 				_gameController.Move();
 				Console.ReadKey();
 			}
-
+			
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine($"\n{activePlayer.GetName()}'s position: {_gameController.GetPlayerPosition()}");
 			Console.WriteLine($"Tile name: {_gameController.TileName()} \n");
 
@@ -159,19 +170,23 @@ public class Game
 
 				if (_gameController.JailedPlayer().Contains(activePlayer))
 				{
-					Console.WriteLine("You are in jail. Choose option:");
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("You are in jail.\n");
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.WriteLine("Choose option:");
 					Console.WriteLine("1. Pay to get out from jail");
 					Console.WriteLine("2. Roll the dice again");
 
 					while (!isValidOption)
 					{
-						Console.Write("Select an option: ");
+						Console.Write("\nSelect an option: ");
 						if (int.TryParse(Console.ReadLine(), out option))
 						{
 							isValidOption = true;
 						}
 						else
 						{
+							Console.ForegroundColor = ConsoleColor.Red;
 							Console.WriteLine("Please enter a valid option number.");
 						}
 					}
@@ -182,9 +197,12 @@ public class Game
 							if (_gameController.PayToGetOutOfJail())
 							{
 								Console.Clear();
+								Console.ForegroundColor = ConsoleColor.Green;
 								Console.WriteLine("You paid to get out of jail.");
+								Console.ForegroundColor = ConsoleColor.Blue;
 								Console.WriteLine("Press Any Key to Roll the Dice!\n");
 								_gameController.Roll();
+								Console.ForegroundColor = ConsoleColor.Yellow;
 								for (int x = 0; x < totalDice.Count; x++)
 								{
 									Console.WriteLine($"Dice {x + 1}: {totalDice[x]}");
@@ -195,6 +213,7 @@ public class Game
 							}
 							else
 							{
+								Console.ForegroundColor = ConsoleColor.Red;
 								Console.WriteLine("Sorry, you don't have enough money to pay and remain in jail.");
 								_finishTurn = true;
 								_gameController.SwitchTurn();
@@ -206,10 +225,12 @@ public class Game
 							for (int x = 0; x < 3; x++)
 							{
 								Console.Clear();
+								Console.ForegroundColor = ConsoleColor.Blue;
 								Console.WriteLine($"Turn {x+1} in jail.");
-								Console.WriteLine("Roll the Dice!");
+								Console.WriteLine("Roll the Dice!\n");
 								Console.ReadKey();
 								_gameController.Roll();
+								Console.ForegroundColor = ConsoleColor.Yellow;
 								Console.WriteLine($"Dice 1: {totalDice[0]}");
 								Console.WriteLine($"Dice 2: {totalDice[1]}");
 								
@@ -218,6 +239,7 @@ public class Game
 								if (_gameController.GetOutOfJailByDice())
 								{
 									Console.Clear();
+									Console.ForegroundColor = ConsoleColor.Green;
 									Console.WriteLine("Congrats! You rolled doubles and you can get out from jail.");
 									_gameController.Move();
 									break;
@@ -227,6 +249,7 @@ public class Game
 									failedRoll++;
 									if (failedRoll == 3)
 									{
+										Console.ForegroundColor = ConsoleColor.Red;
 										Console.WriteLine("You failed to roll doubles for 3 turns. You remain in jail.");
 										_finishTurn = true;
 										_gameController.SwitchTurn();
@@ -235,6 +258,7 @@ public class Game
 							}
 							break;
 						default:
+							Console.ForegroundColor = ConsoleColor.Red;
 							Console.WriteLine("There's no option like that.");
 							break;
 					}
@@ -244,6 +268,7 @@ public class Game
 
 				while (!isValidOption)
 				{
+					Console.ForegroundColor = ConsoleColor.Yellow;
 					Console.Write("Choose an option: ");
 					if (int.TryParse(Console.ReadLine(), out option) && option >= 1 && option <= _menuDesc.Count)
 					{
@@ -251,6 +276,7 @@ public class Game
 					}
 					else
 					{
+						Console.ForegroundColor = ConsoleColor.Red;
 						Console.WriteLine("Please enter a valid number.");
 					}
 				}
@@ -265,6 +291,7 @@ public class Game
 
 	public List<Menu> Menu()
 	{
+		Console.ForegroundColor = ConsoleColor.White;
 		List<Property> playerProp = _gameController.PlayerProperty();
 		_menuDesc = new List<Menu>()
 		{
@@ -304,6 +331,7 @@ public class Game
 	public void Dashboard()
 	{
 		Console.Clear();
+		Console.ForegroundColor = ConsoleColor.Yellow;
 		List<Property> playerProp = _gameController.PlayerProperty();
 		IPlayer activePlayer = _gameController.ActivePlayer();
 		Console.WriteLine($"{activePlayer.GetName()}'s position: {_gameController.TileName()}");
@@ -314,12 +342,19 @@ public class Game
 		{
 			foreach (var prop in playerProp)
 			{
+				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine($"- {prop.TileName}");
+				Console.ForegroundColor = ConsoleColor.White;
 				Console.WriteLine($"Total House: {prop.NumberOfHouse}");
+				if (prop.NumberOfHouse == 3)
+				{
+					Console.WriteLine($"Total Hotel: {prop.NumberOfHotel}");
+				}
 			}
 		}
 		else
 		{
+			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.WriteLine("You don't have any properties.");
 		}
 		Console.ReadKey();
@@ -332,18 +367,23 @@ public class Game
 		switch (propState)
 		{
 			case PropState.Success:
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("Successfully purchased!");
 				break;
 			case PropState.AlreadyOwned:
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Sorry, the property is already owned by another player.");
 				break;
 			case PropState.NotEnoughMoney:
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Sorry, you don't have enough money.");
 				break;
 			case PropState.NotProperty:
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Sorry, this is not a property you can buy.");
 				break;
 			default:
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Error. You cannot purchasing the property.");
 				break;
 		}
@@ -351,12 +391,14 @@ public class Game
 	
 	public void HandleNotification(string message, string playerName)
 	{
-		Console.WriteLine($"{message}, {playerName}");
+		Console.ForegroundColor = ConsoleColor.White;
+		Console.WriteLine($"{message}, {playerName}\n");
 	}
 	
 	public void JailNotification(IPlayer player)
 	{
-		Console.WriteLine($"{player.GetName()} has been sent to jail.");
+		Console.ForegroundColor = ConsoleColor.Red;
+		Console.WriteLine($"\n{player.GetName()} has been sent to jail.");
 	}
 
 	public void StateSellProperty()
@@ -364,10 +406,12 @@ public class Game
 		bool sellProp = _gameController.SellProperty();
 		if (sellProp)
 		{
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("You have successfully sold the property.");
 		}
 		else
 		{
+			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine("You failed to sell the property.");
 		}
 	}
@@ -377,10 +421,12 @@ public class Game
 		bool buyHouse = _gameController.BuyHouse();
 		if (buyHouse)
 		{
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("The house was successfully purchased!");
 		}
 		else
 		{
+			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine("You failed to purchase the house.");
 		}
 	}
@@ -390,10 +436,12 @@ public class Game
 		bool buyHotel = _gameController.BuyHotel();
 		if (buyHotel)
 		{
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("The hotel was successfully purchased!");
 		}
 		else
 		{
+			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine("You failed to purchase the hotel.");
 		}
 	}
@@ -418,27 +466,44 @@ public class Game
 			}
 			else if (cash <= 0)
 			{
+				activePlayers.Remove(player);
 				playersToRemove.Add(player);
 			}
 		}
 
-		// remove bankrupt player from acive player
+		// remove bankrupt player from active player
 		foreach (var playerToRemove in playersToRemove)
 		{
 			activePlayers.Remove(playerToRemove);
-			Console.WriteLine($"{playerToRemove.GetName()} is bankrupt. Sorry, you cannot continue this game.");
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine($"{playerToRemove.GetName()} is bankrupt. Sorry, you cannot continue this game.\n");
 		}
 
 		if (activePlayers.Count == 1)
 		{
 			IPlayer potentialWinner = activePlayers[0];
-			Console.WriteLine($"{potentialWinner.GetName()} has won the game!");
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine($"{potentialWinner.GetName()} has won the game!\n");
 			_gameController.SetGameState(GameState.Finished);
 		}
 		else if (activePlayers.Count == 0)
 		{
-			Console.WriteLine("No active players left. The game is a draw.");
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.WriteLine("No active players left. The game is a draw.\n");
 			_gameController.SetGameState(GameState.Finished);
+		}
+		else 
+		{
+			// cek currPlayer is bankrupt
+			int currPlayerIndex = _gameController.CurrentPlayer();
+			IPlayer currPlayer = _gameController.GetPlayerIndex(currPlayerIndex);
+			if (!activePlayers.Contains(currPlayer))
+			{
+				// curr player is bankrupt, skip their turn
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine($"{currPlayer.GetName()} is bankrupt and cannot roll the dice.\n");
+				FinishTurn(); // skip turn, next player
+			}
 		}
 	}
 
@@ -446,6 +511,7 @@ public class Game
 	{
 		Console.Clear();
 		await Task.Delay(1000);
+		Console.ForegroundColor = ConsoleColor.Blue;
 		Console.WriteLine("......Exiting the game......");
 		Console.WriteLine("Thanks for playing Monopoly!\n");
 		Environment.Exit(0);

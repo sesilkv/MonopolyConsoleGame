@@ -55,7 +55,7 @@ public class GameController
 		Player player = new Player(name);
 		_players.Add(player);
 		_playerPos[player] = _board.GetTile(0);
-		_playerCash[player] = 500;
+		_playerCash[player] = 1000;
 		_jailOrNot[player] = false;
 		_jailTurn[player] = 0;
 	}
@@ -69,6 +69,15 @@ public class GameController
 			return activePlayer;
 		}
 		return null;
+	}
+
+	public IPlayer GetPlayerIndex(int index)
+	{
+		if (index >= 0 && index < _players.Count)
+		{
+			return _players[index];
+		}
+		return null; // Return null if the index is out of bounds
 	}
 
 	public Dictionary<IPlayer, int> GetPlayerCash()
@@ -436,9 +445,13 @@ public class GameController
 				_playerCash[activePlayer] -= taxAmount;
 				NotifyPlayer("You have successfully paid the tax $100", activePlayer.GetName());
 				return TaxUtilityState.Success;
+			} 
+			else 
+			{
+				_playerCash[activePlayer] -= taxAmount;
+				NotifyPlayer("You don't have enough money to pay the tax $100. It seems you are bankrupt", activePlayer.GetName());
 			}
 		}
-		NotifyPlayer("You don't have enough money to pay the tax $100", activePlayer.GetName());
 		return TaxUtilityState.NotEnoughMoney;
 	}
 
@@ -454,8 +467,12 @@ public class GameController
 				NotifyPlayer("You have successfully paid the utility $100", activePlayer.GetName());
 				return TaxUtilityState.Success;
 			}
+			else 
+			{
+				_playerCash[activePlayer] -= utilityAmount;
+				NotifyPlayer("You don't have enough money to pay the utility $100. It seems you are bankrupt", activePlayer.GetName());
+			}
 		}
-		NotifyPlayer("You don't have enough money to pay the utility $100", activePlayer.GetName());
 		return TaxUtilityState.NotEnoughMoney;
 	}
 	
@@ -467,11 +484,11 @@ public class GameController
 		
 		if (propOwner != null && propOwner != currPlayer)
 		{
-			int rent = prop.RentProp + (prop.HousePrice * prop.NumberOfHouse / 10) + (prop.HotelPrice * prop.NumberOfHotel);
+			int rent = prop.RentProp + (prop.HousePrice * prop.NumberOfHouse) + (prop.HotelPrice * prop.NumberOfHotel);
 			if (_playerCash.ContainsKey(activePlayer))
 			{
 				_playerCash[activePlayer] -= rent;
-				NotifyPlayer($"Thank you for paid the rent ${rent} on this country", currPlayer);
+				NotifyPlayer($"\nThank you for paid the rent ${rent} on {TileName()}", currPlayer);
 			}
 			
 			IPlayer owner = GetPlayerByName(propOwner);
@@ -521,6 +538,18 @@ public class GameController
 
 			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= propertyPrice)
 			{
+				// // Clear previous ownership and property improvements
+				// if (prop.Owner != null)
+				// {
+				// 	IPlayer previousOwner = _players.FirstOrDefault(player => player.GetName() == prop.Owner);
+				// 	if (previousOwner != null)
+				// 	{
+				// 		_playerProp[previousOwner].Remove(prop);
+				// 	}
+				// 	prop.SetOwner(null);
+				// 	prop.RemoveHouseHotel();
+				// }
+
 				_playerCash[activePlayer] -= propertyPrice;
 				_playerPos[activePlayer] = prop;
 				prop.SetOwner(activePlayer.GetName());
@@ -653,8 +682,14 @@ public class GameController
 	{
 		int currPos = GetPlayerPosition();
 		Tile currTile = _board.GetTile(currPos);
-		Property prop = currTile as Property;
-		return prop.NumberOfHouse;
+		if (currTile is Property prop)
+		{
+			return prop.NumberOfHouse;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
 	public void GenerateCardChance()
