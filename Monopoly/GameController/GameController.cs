@@ -2,7 +2,7 @@ using Monopoly;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-class GameController
+public class GameController
 {
 	private GameState _gameState;
 	private Board _board;
@@ -13,10 +13,12 @@ class GameController
 	private Dictionary<IPlayer, List<Property>> _playerProp;
 	private Dictionary<IPlayer, bool> _jailOrNot;
 	private Dictionary<IPlayer, int> _jailTurn;
-	private List<Card> _playerCards;
+	private List<Card> _chanceCards = new List<Card>();
+	private List<Card> _communityChestCards = new List<Card>();
 	private List<IDice> _diceList;
 	private List<int> _totalDice;
-	private bool _finishTurn;
+	// private Dictionary<CardType, ActionCardDelegate> _skillCards = new();
+	// private bool _finishTurn;
 	public event Action<IPlayer> PlayerNotifiedJail;
 	
 	// notif tax, utility, amount start, winner
@@ -210,6 +212,13 @@ class GameController
 			TileAction(newTile); //buy, rent
 		}
 	}
+	
+	public Tile GetTile()
+	{
+		int currPos = GetPlayerPosition();
+		Tile currTile = _board.GetTile(currPos);
+		return currTile;
+	}
 
 	public int GetPlayerPosition()
 	{
@@ -316,9 +325,20 @@ class GameController
 			case Property property:
 				PayRent(property);
 				break;
+			case Chance:
+				GenerateCardChance();
+				break;
+			case CommunityChest:
+				GenerateCardCommunityChest();
+				break;
 			default:
 				break;
 		}
+	}
+	
+	public bool IsNotChanceOrCommunityChest(Tile tile)
+	{
+		return !(tile is Chance) && !(tile is CommunityChest);
 	}
 
 	public void MoveToJail()
@@ -447,7 +467,7 @@ class GameController
 		
 		if (propOwner != null && propOwner != currPlayer)
 		{
-			int rent = prop.RentProp + (prop.HousePrice * prop.NumberOfHouse);
+			int rent = prop.RentProp + (prop.HousePrice * prop.NumberOfHouse / 10) + (prop.HotelPrice * prop.NumberOfHotel);
 			if (_playerCash.ContainsKey(activePlayer))
 			{
 				_playerCash[activePlayer] -= rent;
@@ -458,7 +478,7 @@ class GameController
 			if(_playerCash.ContainsKey(owner))
 			{
 				_playerCash[owner] += rent;
-				NotifyPlayer($"You got rent income ${rent} from {currPlayer}", propOwner);
+				NotifyPlayer($"\nYou got rent income ${rent} from {currPlayer}", propOwner);
 			}
 		} 
 	}
@@ -518,7 +538,7 @@ class GameController
 		return PropState.Success;
 	}
 	
-	public bool SellProperty() //also the house
+	public bool SellProperty() //also the house and hotel
 	{
 		IPlayer activePlayer = ActivePlayer();
 		int currPos = GetPlayerPosition();
@@ -532,10 +552,11 @@ class GameController
 			{
 				int propertyPrice = prop.BuyProp;
 				int housePrice = prop.HousePrice * prop.NumberOfHouse;
+				int hotelPrice = prop.HotelPrice * prop.NumberOfHotel;
 
 				if (_playerCash.ContainsKey(activePlayer))
 				{
-					_playerCash[activePlayer] += propertyPrice + housePrice;
+					_playerCash[activePlayer] += propertyPrice + housePrice + hotelPrice;
 					props.Remove(prop);
 					prop.SetOwner(null);
 				}
@@ -601,9 +622,84 @@ class GameController
 		}
 	}
 	
+	public bool BuyHotel()
+	{
+		IPlayer activePlayer = ActivePlayer();
+		int currPos = GetPlayerPosition();
+		Tile currTile = _board.GetTile(currPos);
+		Property prop = currTile as Property;
+		
+		int hotelPrice = prop.HotelPrice;
+		int maxHotel = 2;
+		
+		if (prop.NumberOfHotel >= maxHotel)
+		{
+			return false;
+		}
+		
+		if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= hotelPrice)
+		{
+			_playerCash[activePlayer] -= hotelPrice;
+			prop.AddHotel();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public int GetNumberOfHouses()
+	{
+		int currPos = GetPlayerPosition();
+		Tile currTile = _board.GetTile(currPos);
+		Property prop = currTile as Property;
+		return prop.NumberOfHouse;
+	}
+	
+	public void GenerateCardChance()
+	{
+		Card chanceCard = new Card("Chance Card 1", "Happy birthday!", CardType.Chance);
+		
+		
+		CardType type = chanceCard.CardType;
+		
+		// ActionCardDelegate action;
+		ActionCardDelegate skillBirthday = CardSkill.ChanceBirthday;
+		
+		// _skillCards.Add(type, skillBirthday);
+		chanceCard.ExecuteActionCard(skillBirthday, this);
+	}
+	
+	public void GenerateCardCommunityChest()
+	{
+		Card communityChestCard = new Card("Community Chest Card 1", "Pay Tax!", CardType.CommunityChest);
 
-	// RandomChanceCard()
-	// RandomCommunityChestCard()
-	// IsWinner() bool bankrupt
-	// EndGame()
+		CardType type = communityChestCard.CardType;
+
+		// ActionCardDelegate action;
+		ActionCardDelegate skillPayTax = CardSkill.CommunityPayTax;
+		// _skillCards.Add(type, skillPayTax);
+		communityChestCard.ExecuteActionCard(skillPayTax, this);
+	}
+	
+	// public Card DrawChanceCard()
+	// {
+	// 	Random random = new Random();
+	// 	int index = random.Next(_chanceCards.Count);
+	// 	return _chanceCards[index];
+	// }
+
+	// public void ExecuteCommunityChestCardAction(IPlayer player)
+	// {
+	// 	Card communityChestCard = DrawCommunityChestCard();
+	// 	communityChestCard.ActionCard(player);
+	// }
+
+	// public Card DrawCommunityChestCard()
+	// {
+	// 	Random random = new Random();
+	// 	int index = random.Next(_communityChestCards.Count);
+	// 	return _communityChestCards[index];
+	// }
 }

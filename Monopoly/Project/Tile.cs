@@ -22,6 +22,12 @@ namespace Monopoly
 			_tileType = tileType;
 		}
 		
+		public Tile(int position, string? tileName)
+		{
+			_position = position;
+			_tileName = tileName;
+		}
+		
 		public Tile(int position)
 		{
 			_position = position;
@@ -31,7 +37,5 @@ namespace Monopoly
 		{
 			
 		}
-
-		// public abstract Tile GetTile(int position);
 	}
 }

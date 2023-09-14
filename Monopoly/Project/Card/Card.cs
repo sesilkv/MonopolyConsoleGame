@@ -1,21 +1,32 @@
 namespace Monopoly;
 
-public class Card : Tile
+public delegate bool ActionCardDelegate(GameController game);
+public class Card
 {
-	private CardType _typeCard; // enum
-	private int _cardDesc;
-
-	public CardType TypeCard { get => _typeCard; set => _typeCard = value; }
-	public int CardDesc { get => _cardDesc; set => _cardDesc = value; }
-
-	public Card(int position, CardType typeCard) : base(position)
+	private string? _cardName;
+	private string? _cardDesc;
+	private CardType _cardType;
+	private ActionCardDelegate _actionCard;
+	
+	public Card(string cardName, string cardDescription, CardType cardType)
 	{
-		// position = position;
-		_typeCard = typeCard;
+		_cardName = cardName;
+		_cardDesc = cardDescription;
+		_cardType = cardType;
 	}
+	
+	public string CardName { get => _cardName; set => _cardName = value; }
 
-	public Card(CardType typeCard, int position) : base(position)
+	public string? CardDescription { get => _cardDesc; set => _cardDesc = value; }
+	
+	public CardType CardType { get => _cardType; set => _cardType = value; }
+	
+	public ActionCardDelegate ActionCardDelegate { get => _actionCard; set => _actionCard = value; }
+
+	public bool ExecuteActionCard(ActionCardDelegate action, GameController game)
 	{
+		_actionCard = action;
+		action.Invoke(game);
+		return true;
 	}
-
 }

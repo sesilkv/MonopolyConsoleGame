@@ -6,10 +6,12 @@ public class Property : Tile
 	private int _buyProp;
 	private int _rentProp;
 	private int _housePrice;
+	private int _hotelPrice;
 	private string? _ownerProp;
 	private int _numberOfHouse;
+	private int _numberOfHotel;
 	private PropertySituation _propSituation;
-	public Property(int position, string? tileName, string? tileDescription, int buyProp, int housePrice, int rentProp, PropertyType propType) 
+	public Property(int position, string? tileName, string? tileDescription, int buyProp, int housePrice, int hotelPrice, int rentProp, PropertyType propType) 
 	{
 		// pay rent dynamic
 		_tileType = TileType.Property;
@@ -18,9 +20,11 @@ public class Property : Tile
 		_tileDescription = tileDescription;
 		_propType = propType;
 		_buyProp = buyProp;
+		_hotelPrice = hotelPrice;
 		_rentProp = rentProp;
 		_housePrice = housePrice;
 		_numberOfHouse = 0;
+		_numberOfHotel = 0;
 		_ownerProp = null;
 		_propSituation = PropertySituation.Unowned;
 	}
@@ -37,26 +41,21 @@ public class Property : Tile
 
 	public PropertyType PropType { get => _propType; set => _propType = value; }
 	public int BuyProp { get => _buyProp; set => _buyProp = value; }
-	public int RentProp 
-	{
-		get { return _rentProp; }
-		set { _rentProp = value; }
-	}
+	public int RentProp { get => _rentProp; set => _rentProp = value; }
 	public PropertySituation PropSituation { get => _propSituation; set => _propSituation = value; }
 	public int NumberOfHouse { get => _numberOfHouse; }
-	public int HousePrice 
-	{ 
-		get => _housePrice; 
-	}
+	public int HousePrice { get => _housePrice; }
+	public int HotelPrice { get => _hotelPrice; }
+	public int NumberOfHotel { get => _numberOfHotel; }
 	
 	public void AddHouse()
 	{
 		_numberOfHouse++;
 	}
 	
-	public void RemoveHouse()
+	public void AddHotel()
 	{
-		_numberOfHouse--;
+		_numberOfHotel++;
 	}
 	
 	public string Owner { get => _ownerProp; }
@@ -66,6 +65,4 @@ public class Property : Tile
 		_ownerProp = owner;
 		_propSituation = PropertySituation.Owned;
 	}
-		
-	
 }

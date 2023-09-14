@@ -35,7 +35,7 @@ public class Game
 
 	public void StartGame()
 	{
-		// Console.Clear();
+		Console.Clear();
 		_gameController.PlayerNotified += HandleNotification;
 		_gameController.PlayerNotifiedJail += JailNotification;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
@@ -141,10 +141,14 @@ public class Game
 				Console.ReadKey();
 			}
 
-			Console.WriteLine($"{activePlayer.GetName()}'s position: {_gameController.GetPlayerPosition()}");
+			Console.WriteLine($"\n{activePlayer.GetName()}'s position: {_gameController.GetPlayerPosition()}");
 			Console.WriteLine($"Tile name: {_gameController.TileName()} \n");
-			Console.WriteLine($"{_gameController.TileDescription()}, {activePlayer.GetName()}!\n");
-			
+
+			Tile currTile = _gameController.GetTile();
+			if (_gameController.IsNotChanceOrCommunityChest(currTile))
+			{
+				Console.WriteLine($"{_gameController.TileDescription()}, {activePlayer.GetName()}!\n");
+			}
 
 			Console.ReadKey();
 			_finishTurn = false;
@@ -273,6 +277,10 @@ public class Game
 		{
 			_menuDesc.Add(new Menu { NameMenu = "Sell Property", Action = StateSellProperty });
 			_menuDesc.Add(new Menu { NameMenu = "Buy House", Action = StateBuyHouse });
+			if (_gameController.GetNumberOfHouses() == 3)
+			{
+				_menuDesc.Add(new Menu { NameMenu = "Buy Hotel", Action = StateBuyHotel });
+			}
 		}
 
 		_menuDesc.Add(new Menu { NameMenu = "Quit Game", Action = () => QuitGame() });
@@ -369,11 +377,24 @@ public class Game
 		bool buyHouse = _gameController.BuyHouse();
 		if (buyHouse)
 		{
-			Console.WriteLine("Success purchased!");
+			Console.WriteLine("The house was successfully purchased!");
 		}
 		else
 		{
 			Console.WriteLine("You failed to purchase the house.");
+		}
+	}
+	
+	public void StateBuyHotel()
+	{
+		bool buyHotel = _gameController.BuyHotel();
+		if (buyHotel)
+		{
+			Console.WriteLine("The hotel was successfully purchased!");
+		}
+		else
+		{
+			Console.WriteLine("You failed to purchase the hotel.");
 		}
 	}
 

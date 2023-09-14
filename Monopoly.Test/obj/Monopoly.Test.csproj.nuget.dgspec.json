@@ -1,0 +1,146 @@
+{
+  "format": 1,
+  "restore": {
+    "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\Monopoly.Test.csproj": {}
+  },
+  "projects": {
+    "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\Monopoly.Test.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\Monopoly.Test.csproj",
+        "projectName": "Monopoly.Test",
+        "projectPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\Monopoly.Test.csproj",
+        "packagesPath": "C:\\Users\\Kirana\\.nuget\\packages\\",
+        "outputPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Kirana\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {
+                "projectPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.5.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            },
+            "NUnit.Analyzers": {
+              "target": "Package",
+              "version": "[3.6.1, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.4.2, )"
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.308\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+        "projectName": "Monopoly",
+        "projectPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+        "packagesPath": "C:\\Users\\Kirana\\.nuget\\packages\\",
+        "outputPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Kirana\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "NLog": {
+              "target": "Package",
+              "version": "[5.2.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.308\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
