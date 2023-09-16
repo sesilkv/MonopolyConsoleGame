@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {}
+    "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {}
   },
   "projects": {
-    "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {
+    "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+        "projectUniqueName": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
         "projectName": "Monopoly",
-        "projectPath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
+        "projectPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\Monopoly.csproj",
         "packagesPath": "C:\\Users\\Kirana\\.nuget\\packages\\",
-        "outputPath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\obj\\",
+        "outputPath": "d:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Kirana\\AppData\\Roaming\\NuGet\\NuGet.Config"

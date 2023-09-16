@@ -13,15 +13,13 @@ public class GameController
 	private Dictionary<IPlayer, List<Property>> _playerProp;
 	private Dictionary<IPlayer, bool> _jailOrNot;
 	private Dictionary<IPlayer, int> _jailTurn;
-	private List<Card> _chanceCards = new List<Card>();
-	private List<Card> _communityChestCards = new List<Card>();
+	// private List<Card> _chanceCards = new List<Card>();
+	// private List<Card> _communityChestCards = new List<Card>();
 	private List<IDice> _diceList;
 	private List<int> _totalDice;
-	// private Dictionary<CardType, ActionCardDelegate> _skillCards = new();
-	// private bool _finishTurn;
 	public event Action<IPlayer> PlayerNotifiedJail;
 	
-	// notif tax, utility, amount start, winner
+	// notify tax, utility, amount start, winner
 	public delegate void PlayerNotificationHandler(string message, string playerName);
 	public event PlayerNotificationHandler PlayerNotified;
 
@@ -87,11 +85,6 @@ public class GameController
 
 	public int CurrentPlayer()
 	{
-		// method baru
-		// if (_currPlayer < 0 || _currPlayer >= _players.Count)
-		// {
-		// 	_currPlayer = 0;
-		// }
 		return _currPlayer;
 	}
 
@@ -218,7 +211,7 @@ public class GameController
 				NotifyPlayer("You have got the amount start $200", activePlayer.GetName());
 			}
 			
-			TileAction(newTile); //buy, rent
+			TileAction(newTile); //buy, rent, tax, utility, jail, chance, community
 		}
 	}
 	
@@ -411,6 +404,8 @@ public class GameController
 					NotifyPlayer("Congrats, you can get out from jail", activePlayer.GetName());
 					return true;
 				}
+				_playerCash[activePlayer] -= 100;
+				NotifyPlayer("You can get out from jail, but it seems you are bankrupt", activePlayer.GetName());
 			}
 		}
 		return false;
@@ -449,7 +444,7 @@ public class GameController
 			else 
 			{
 				_playerCash[activePlayer] -= taxAmount;
-				NotifyPlayer("You don't have enough money to pay the tax $100. It seems you are bankrupt", activePlayer.GetName());
+				NotifyPlayer("Actually, you don't have enough money to pay the tax $100.\nIt seems you are bankrupt", activePlayer.GetName());
 			}
 		}
 		return TaxUtilityState.NotEnoughMoney;
@@ -470,7 +465,7 @@ public class GameController
 			else 
 			{
 				_playerCash[activePlayer] -= utilityAmount;
-				NotifyPlayer("You don't have enough money to pay the utility $100. It seems you are bankrupt", activePlayer.GetName());
+				NotifyPlayer("Actually, you don't have enough money to pay the utility $100. \nIt seems you are bankrupt", activePlayer.GetName());
 			}
 		}
 		return TaxUtilityState.NotEnoughMoney;
@@ -598,21 +593,6 @@ public class GameController
 		}
 		return false;
 	}
-	
-	// public int PlayerHouse()
-	// {
-	// 	IPlayer activePlayer = ActivePlayer();
-	// 	int currPos = GetPlayerPosition();
-	// 	if (activePlayer != null && currPos > 0)
-	// 	{
-	// 		Tile currTile = _board.GetTile(currPos);
-	// 		if (currTile is Property prop && prop.Owner == activePlayer.GetName())
-	// 		{
-	// 			return prop.NumberOfHouse;
-	// 		}
-	// 	}
-	// 	return 0;
-	// }
 
 	public bool BuyHouse()
 	{
@@ -694,42 +674,35 @@ public class GameController
 	
 	public void GenerateCardChance()
 	{
-		Card chanceCard = new Card("Chance Card 1", "Happy birthday!", CardType.Chance);
 		
+		Card chanceCard = new Card("Chance Card 1", "Happy birthday!", CardType.Chance);
+		// _chanceCards.Add(new Card("Collect Money", "Collect $100!", CardType.Chance));
 		
 		CardType type = chanceCard.CardType;
-		
-		// ActionCardDelegate action;
 		ActionCardDelegate skillBirthday = CardSkill.ChanceBirthday;
 		
-		// _skillCards.Add(type, skillBirthday);
 		chanceCard.ExecuteActionCard(skillBirthday, this);
 	}
+	
+	// public void DrawChanceCard()
+	// {
+	// 	Random random = new Random();
+	// 	int chanceCardIndex = random.Next(_chanceCards.Count);
+	// 	Card chanceCard = _chanceCards[chanceCardIndex];
+	// 	IPlayer currPlayer = ActivePlayer();
+	// 	chanceCard.ExecuteActionCard(this);
+	// }
 	
 	public void GenerateCardCommunityChest()
 	{
 		Card communityChestCard = new Card("Community Chest Card 1", "Pay Tax!", CardType.CommunityChest);
 
 		CardType type = communityChestCard.CardType;
-
 		// ActionCardDelegate action;
 		ActionCardDelegate skillPayTax = CardSkill.CommunityPayTax;
 		// _skillCards.Add(type, skillPayTax);
 		communityChestCard.ExecuteActionCard(skillPayTax, this);
 	}
-	
-	// public Card DrawChanceCard()
-	// {
-	// 	Random random = new Random();
-	// 	int index = random.Next(_chanceCards.Count);
-	// 	return _chanceCards[index];
-	// }
-
-	// public void ExecuteCommunityChestCardAction(IPlayer player)
-	// {
-	// 	Card communityChestCard = DrawCommunityChestCard();
-	// 	communityChestCard.ActionCard(player);
-	// }
 
 	// public Card DrawCommunityChestCard()
 	// {

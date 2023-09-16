@@ -199,6 +199,7 @@ public class Game
 								Console.Clear();
 								Console.ForegroundColor = ConsoleColor.Green;
 								Console.WriteLine("You paid to get out of jail.");
+								Console.ReadKey();
 								Console.ForegroundColor = ConsoleColor.Blue;
 								Console.WriteLine("Press Any Key to Roll the Dice!\n");
 								_gameController.Roll();

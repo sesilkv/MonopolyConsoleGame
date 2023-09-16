@@ -58,10 +58,14 @@ public class Property : Tile
 		_numberOfHotel++;
 	}
 	
-	public void RemoveHouseHotel()
+	public void RemoveHouse()
 	{
-		_numberOfHotel = 0;
-		_numberOfHouse = 0;
+		_numberOfHouse--;
+	}
+	
+	public void RemoveHotel()
+	{
+		_numberOfHotel--;
 	}
 	
 	public string Owner { get => _ownerProp; }

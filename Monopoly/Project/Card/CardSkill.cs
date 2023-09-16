@@ -13,6 +13,8 @@ public class CardSkill
 			game.NotifyPlayer("Community Chest Card: you have successfully paid the tax $300", activePlayer.GetName());
 			return true;
 		}
+		game.GetPlayerCash()[activePlayer] -= taxComm;
+		game.NotifyPlayer("Community Chest Card: you have successfully paid the tax $300, but it seems you are bankrupt", activePlayer.GetName());
 		return false;
 	}
 

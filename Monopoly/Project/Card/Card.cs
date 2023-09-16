@@ -12,6 +12,7 @@ public class Card
 	{
 		_cardName = cardName;
 		_cardDesc = cardDescription;
+		// _actionCard = actionCard;
 		_cardType = cardType;
 	}
 	

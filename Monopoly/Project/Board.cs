@@ -49,7 +49,7 @@ namespace Monopoly
 				new Property(18, "Korea", "Welcome to Korea", 300, 100, 60, 50, PropertyType.Country),
 				// new Utility(19, "Electric Company", "Thank you for the payment", 100),
 				new Jail(19, "In Jail", "Sorry, you must go to jail", 100),
-				new FreeParking(20, "Free Parking", "You can choose any place"),
+				new Property(20, "North Korea", "Welcome to North Korea", 300, 100, 60, 50, PropertyType.Country),
 				
 				new Property(21, "China", "Welcome to China", 250, 100, 60, 50, PropertyType.Country),
 				new Chance(22, "Chance"),
