@@ -1,10 +1,14 @@
 ﻿using Monopoly;
 using System.Linq;
+using NLog;
 
 class Program
 {
+	private static readonly Logger logger = LogManager.GetLogger("MyLogger");
 	static void Main(string[] args)
 	{
+		LogManager.LoadConfiguration("nlog.config");
+		
 		Game monopoly = new Game();
 		monopoly.StartGame();
 	}
@@ -40,7 +44,7 @@ public class Game
 		bool inputValid = false;
 		while (!inputValid || totalPlayer < 2 || totalPlayer > 4)
 		{
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine("\nHow many players? (2-4)");
 			inputValid = int.TryParse(Console.ReadLine(), out totalPlayer);
 
@@ -61,7 +65,7 @@ public class Game
 		HashSet<string> usedPlayerName = new HashSet<string>();
 		for (int x = 1; x <= totalPlayer; x++)
 		{
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine($"Username player {x}: ");
 			string inputName = Console.ReadLine();
 
@@ -77,7 +81,7 @@ public class Game
 					Console.WriteLine("Invalid input! Player name already exists.\n");
 				}
 				
-				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.ForegroundColor = ConsoleColor.White;
 				Console.WriteLine($"Username player {x}: ");
 				inputName = Console.ReadLine();
 			}
@@ -103,7 +107,7 @@ public class Game
 		while (_gameController.GetGameState() == GameState.InProgress || _gameController.GetGameState() == GameState.NotStarted)
 		{
 			IPlayer activePlayer = _gameController.ActivePlayer();
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine($"========= {activePlayer.GetName()}'s Turn =========");
 			Console.ForegroundColor = ConsoleColor.Blue;
 			Console.WriteLine("Press Any Key to Roll the Dice!\n");
@@ -113,7 +117,7 @@ public class Game
 			List<int> totalDice = _gameController.GetTotalDice();
 			int total = _gameController.TotalDice();
 			
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.White;
 			for (int x = 0; x < totalDice.Count; x++)
 			{
 				Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
@@ -133,7 +137,7 @@ public class Game
 				totalDice = _gameController.GetTotalDice();
 				total = _gameController.TotalDice();
 				
-				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.ForegroundColor = ConsoleColor.White;
 				for (int x = 0; x < totalDice.Count; x++)
 				{
 					Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
@@ -151,7 +155,7 @@ public class Game
 				Console.ReadKey();
 			}
 			
-			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine($"\n{activePlayer.GetName()}'s position: {_gameController.GetPlayerPosition()}");
 			Console.WriteLine($"Tile name: {_gameController.TileName()} \n");
 
@@ -172,7 +176,7 @@ public class Game
 				{
 					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("You are in jail.\n");
-					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.ForegroundColor = ConsoleColor.White;
 					Console.WriteLine("Choose option:");
 					Console.WriteLine("1. Pay to get out from jail");
 					Console.WriteLine("2. Roll the dice again");
@@ -203,7 +207,7 @@ public class Game
 								Console.ForegroundColor = ConsoleColor.Blue;
 								Console.WriteLine("Press Any Key to Roll the Dice!\n");
 								_gameController.Roll();
-								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.ForegroundColor = ConsoleColor.White;
 								for (int x = 0; x < totalDice.Count; x++)
 								{
 									Console.WriteLine($"Dice {x + 1}: {totalDice[x]}");
@@ -231,7 +235,7 @@ public class Game
 								Console.WriteLine("Roll the Dice!\n");
 								Console.ReadKey();
 								_gameController.Roll();
-								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.ForegroundColor = ConsoleColor.White;
 								Console.WriteLine($"Dice 1: {totalDice[0]}");
 								Console.WriteLine($"Dice 2: {totalDice[1]}");
 								
@@ -269,7 +273,7 @@ public class Game
 
 				while (!isValidOption)
 				{
-					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.ForegroundColor = ConsoleColor.Blue;
 					Console.Write("Choose an option: ");
 					if (int.TryParse(Console.ReadLine(), out option) && option >= 1 && option <= _menuDesc.Count)
 					{
@@ -292,7 +296,7 @@ public class Game
 
 	public List<Menu> Menu()
 	{
-		Console.ForegroundColor = ConsoleColor.White;
+		Console.ForegroundColor = ConsoleColor.Yellow;
 		List<Property> playerProp = _gameController.PlayerProperty();
 		_menuDesc = new List<Menu>()
 		{
@@ -332,7 +336,7 @@ public class Game
 	public void Dashboard()
 	{
 		Console.Clear();
-		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.ForegroundColor = ConsoleColor.White;
 		List<Property> playerProp = _gameController.PlayerProperty();
 		IPlayer activePlayer = _gameController.ActivePlayer();
 		Console.WriteLine($"{activePlayer.GetName()}'s position: {_gameController.TileName()}");
@@ -345,7 +349,7 @@ public class Game
 			{
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine($"- {prop.TileName}");
-				Console.ForegroundColor = ConsoleColor.White;
+				Console.ForegroundColor = ConsoleColor.Blue;
 				Console.WriteLine($"Total House: {prop.NumberOfHouse}");
 				if (prop.NumberOfHouse == 3)
 				{

@@ -1,9 +1,11 @@
 using Monopoly;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using NLog;
 
 public class GameController
 {
+	private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 	private GameState _gameState;
 	private Board _board;
 	private List<IPlayer> _players;
@@ -52,6 +54,7 @@ public class GameController
 	{
 		Player player = new Player(name);
 		_players.Add(player);
+		logger.Info($"Player {name} added to game.");
 		_playerPos[player] = _board.GetTile(0);
 		_playerCash[player] = 1000;
 		_jailOrNot[player] = false;
@@ -207,7 +210,7 @@ public class GameController
 				{
 					_playerCash[activePlayer] += amountAdd;
 				}
-				
+				logger.Info($"{activePlayer.GetName()} has crossed the first tile.");
 				NotifyPlayer("You have got the amount start $200", activePlayer.GetName());
 			}
 			
