@@ -5,7 +5,7 @@ using NLog;
 
 public class GameController
 {
-	private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+	private static readonly Logger log = LogManager.GetCurrentClassLogger();
 	private GameState _gameState;
 	private Board _board;
 	private List<IPlayer> _players;
@@ -54,7 +54,7 @@ public class GameController
 	{
 		Player player = new Player(name);
 		_players.Add(player);
-		logger.Info($"Player {name} added to game.");
+		log.Info($"Player {name} added to game.");
 		_playerPos[player] = _board.GetTile(0);
 		_playerCash[player] = 1000;
 		_jailOrNot[player] = false;
@@ -141,6 +141,7 @@ public class GameController
 			result = dice.Roll();
 			_totalDice.Add(result);
 		}
+		log.Info("Dice is rolling.");
 		return result;
 	}
 	
@@ -210,7 +211,7 @@ public class GameController
 				{
 					_playerCash[activePlayer] += amountAdd;
 				}
-				logger.Info($"{activePlayer.GetName()} has crossed the first tile.");
+				log.Info($"{activePlayer.GetName()} has crossed the first tile.");
 				NotifyPlayer("You have got the amount start $200", activePlayer.GetName());
 			}
 			
@@ -258,6 +259,7 @@ public class GameController
 		{
 			_playerPos.Add(activePlayer, tile); // first time setting the player's position, add new entry
 		}
+		log.Info($"{activePlayer.GetName()}'s position is {tile.TileName}.");
 	}
 
 	public string TileName()
@@ -357,6 +359,7 @@ public class GameController
 			_jailOrNot[activePlayer] = true;
 			_jailTurn[activePlayer] = 0;
 			PlayerNotifiedJail?.Invoke(activePlayer);
+			log.Info($"{activePlayer.GetName()} move to jail.");
 		}
 	}
 
@@ -365,7 +368,6 @@ public class GameController
 		List<IPlayer> jailedPlayer = new List<IPlayer>();
 		foreach(var player in _jailOrNot.Keys)
 		{
-			// Console.WriteLine($"{player}");
 			if (_jailOrNot[player])
 			{
 				jailedPlayer.Add(player);
@@ -383,8 +385,10 @@ public class GameController
 			if (totDice.Count == 2 && totDice[0] == totDice [1])
 			{
 				_jailOrNot[activePlayer] = false; // the player is no longer in jail
+				log.Info($"{activePlayer.GetName()} can get out from jail by double dice.");
 				return true; // the player successfully got out of jail
 			}
+			log.Info($"{activePlayer.GetName()} can't get out from jail by double dice.");
 		}
 		return false;
 	}
@@ -404,10 +408,12 @@ public class GameController
 				{
 					_playerCash[activePlayer] -= 100;
 					_jailOrNot[activePlayer] = false;
+					log.Info($"{activePlayer.GetName()} paid to get out from jail.");
 					NotifyPlayer("Congrats, you can get out from jail", activePlayer.GetName());
 					return true;
 				}
 				_playerCash[activePlayer] -= 100;
+				log.Info($"{activePlayer.GetName()} paid to get out from jail and bankrupt at the same time.");
 				NotifyPlayer("You can get out from jail, but it seems you are bankrupt", activePlayer.GetName());
 			}
 		}
@@ -441,12 +447,14 @@ public class GameController
 			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= taxAmount)
 			{
 				_playerCash[activePlayer] -= taxAmount;
+				log.Info($"{activePlayer.GetName()} paid tax.");
 				NotifyPlayer("You have successfully paid the tax $100", activePlayer.GetName());
 				return TaxUtilityState.Success;
 			} 
 			else 
 			{
 				_playerCash[activePlayer] -= taxAmount;
+				log.Info($"{activePlayer.GetName()} paid tax and bankrupt.");
 				NotifyPlayer("Actually, you don't have enough money to pay the tax $100.\nIt seems you are bankrupt", activePlayer.GetName());
 			}
 		}
@@ -462,12 +470,14 @@ public class GameController
 			if (_playerCash.ContainsKey(activePlayer) && _playerCash[activePlayer] >= utilityAmount)
 			{
 				_playerCash[activePlayer] -= utilityAmount;
+				log.Info($"{activePlayer.GetName()} paid utility.");
 				NotifyPlayer("You have successfully paid the utility $100", activePlayer.GetName());
 				return TaxUtilityState.Success;
 			}
 			else 
 			{
 				_playerCash[activePlayer] -= utilityAmount;
+				log.Info($"{activePlayer.GetName()} paid utility and bankrupt.");
 				NotifyPlayer("Actually, you don't have enough money to pay the utility $100. \nIt seems you are bankrupt", activePlayer.GetName());
 			}
 		}
@@ -495,6 +505,7 @@ public class GameController
 				_playerCash[owner] += rent;
 				NotifyPlayer($"\nYou got rent income ${rent} from {currPlayer}", propOwner);
 			}
+			log.Info($"{currPlayer} paid the rent to {propOwner}.");
 		} 
 	}
 
@@ -556,9 +567,11 @@ public class GameController
 					_playerProp[activePlayer] = new List<Property>();
 				}
 				_playerProp[activePlayer].Add(prop);
+				log.Info($"{prop.TileName} property was bought by {activePlayer.GetName()}.");
 			}
 			else
 			{
+				log.Warn($"{activePlayer.GetName()} doesn't have enough money to buy {prop.TileName} property.");
 				return PropState.NotEnoughMoney;
 			}
 		}
@@ -587,6 +600,7 @@ public class GameController
 					props.Remove(prop);
 					prop.SetOwner(null);
 				}
+				log.Info($"{activePlayer.GetName()} sells {prop.TileName} property.");
 				return true;
 			}
 			else
@@ -626,6 +640,7 @@ public class GameController
 		{
 			_playerCash[activePlayer] -= housePrice;
 			prop.AddHouse();
+			log.Info($"{activePlayer.GetName()} buys {prop.NumberOfHouse} house on {prop.TileName} property.");
 			return true;
 		}
 		else
@@ -653,6 +668,7 @@ public class GameController
 		{
 			_playerCash[activePlayer] -= hotelPrice;
 			prop.AddHotel();
+			log.Info($"{activePlayer.GetName()} buys {prop.NumberOfHotel} hotel on {prop.TileName} property.");
 			return true;
 		}
 		else

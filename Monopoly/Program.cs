@@ -1,13 +1,17 @@
 ﻿using Monopoly;
 using System.Linq;
 using NLog;
+using NLog.Fluent;
 
 class Program
 {
-	private static readonly Logger logger = LogManager.GetLogger("MyLogger");
+	private static Logger log;
 	static void Main(string[] args)
 	{
-		LogManager.LoadConfiguration("nlog.config");
+		var nlogConfigPath = Path.Combine(Directory.GetCurrentDirectory(), ".\\Log\\nlog.config");
+		LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(nlogConfigPath);
+		log = LogManager.GetCurrentClassLogger();
+		// LogManager.LoadConfiguration("nlog.config");
 		
 		Game monopoly = new Game();
 		monopoly.StartGame();
@@ -16,6 +20,7 @@ class Program
 
 public class Game
 {
+	private static readonly Logger log = LogManager.GetCurrentClassLogger();
 	private GameController _gameController;
 	private bool _finishTurn;
 	private IPlayer _activePlayer;
@@ -37,6 +42,7 @@ public class Game
 		_gameController.PlayerNotifiedJail += JailNotification;
 		Console.ForegroundColor = ConsoleColor.Cyan;
 		Console.WriteLine("======= Welcome to Monopoly Game! =======");
+		log.Info("Intro game.");
 		Console.ReadKey();
 
 		// PLAYER
@@ -47,15 +53,18 @@ public class Game
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine("\nHow many players? (2-4)");
 			inputValid = int.TryParse(Console.ReadLine(), out totalPlayer);
+			log.Info($"There are {totalPlayer} players.");
 
 			Console.ForegroundColor = ConsoleColor.Red;
 			if (!inputValid)
 			{
 				Console.WriteLine("Please input a valid number!\n");
+				log.Warn("Not a valid number.");
 			}
 			else if (totalPlayer < 2 || totalPlayer > 4)
 			{
 				Console.WriteLine("Please input number of players between 2 and 4!\n");
+				log.Warn("User doesn't input number of players between 2 and 4.");
 			}
 
 		}
@@ -109,6 +118,7 @@ public class Game
 			IPlayer activePlayer = _gameController.ActivePlayer();
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine($"========= {activePlayer.GetName()}'s Turn =========");
+			log.Info($"{activePlayer.GetName()} is playing.");
 			Console.ForegroundColor = ConsoleColor.Blue;
 			Console.WriteLine("Press Any Key to Roll the Dice!\n");
 			Console.ReadKey();
@@ -123,6 +133,7 @@ public class Game
 				Console.WriteLine($"Dice {x+1}: {totalDice[x]}");
 			}
 			Console.WriteLine($"Total: {total} \n");
+			log.Info($"The result of the dice is {total}.");
 			Console.ReadKey();
 	
 			_gameController.Move();
@@ -482,6 +493,7 @@ public class Game
 			activePlayers.Remove(playerToRemove);
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine($"{playerToRemove.GetName()} is bankrupt. Sorry, you cannot continue this game.\n");
+			log.Info($"{playerToRemove.GetName()} is bankrupt and can't continue the game.");
 		}
 
 		if (activePlayers.Count == 1)
@@ -490,6 +502,7 @@ public class Game
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine($"{potentialWinner.GetName()} has won the game!\n");
 			_gameController.SetGameState(GameState.Finished);
+			log.Info($"The game is over and {potentialWinner.GetName()} has won the game.");
 		}
 		else if (activePlayers.Count == 0)
 		{
@@ -519,6 +532,7 @@ public class Game
 		Console.ForegroundColor = ConsoleColor.Blue;
 		Console.WriteLine("......Exiting the game......");
 		Console.WriteLine("Thanks for playing Monopoly!\n");
+		log.Info("The game had to be stopped.");
 		Environment.Exit(0);
 	}
 }
