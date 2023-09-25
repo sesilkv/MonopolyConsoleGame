@@ -39,7 +39,11 @@ public class Property : Tile
 		_propType = propType;
 	}
 
-	public PropertyType PropType { get => _propType; set => _propType = value; }
+    public Property(int position, string? tileName, string v1, int v2, int v3, int v4, PropertyType country) : base(position, tileName)
+    {
+    }
+
+    public PropertyType PropType { get => _propType; set => _propType = value; }
 	public int BuyProp { get => _buyProp; set => _buyProp = value; }
 	public int RentProp { get => _rentProp; set => _rentProp = value; }
 	public PropertySituation PropSituation { get => _propSituation; set => _propSituation = value; }

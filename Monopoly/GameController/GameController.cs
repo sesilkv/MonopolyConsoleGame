@@ -18,6 +18,7 @@ public class GameController
 	// private List<Card> _chanceCards = new List<Card>();
 	// private List<Card> _communityChestCards = new List<Card>();
 	private List<IDice> _diceList;
+	public List<IDice> DiceList {get => _diceList; set => _diceList = value;}
 	private List<int> _totalDice;
 	public event Action<IPlayer> PlayerNotifiedJail;
 	
@@ -129,6 +130,7 @@ public class GameController
 		{
 			Dice dice = new Dice(x);
 			_diceList.Add(dice);
+			log.Info("Dice added.");
 			return true;
 		}
 		else
@@ -143,8 +145,9 @@ public class GameController
 		int result = 0;
 		foreach (var dice in _diceList)
 		{
-			result = dice.Roll();
-			_totalDice.Add(result);
+			int rollResult = dice.Roll();
+			result += rollResult;
+			_totalDice.Add(rollResult);
 		}
 		log.Info("Dice is rolling.");
 		return result;

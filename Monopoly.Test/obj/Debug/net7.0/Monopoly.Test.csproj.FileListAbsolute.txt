@@ -104,3 +104,8 @@ d:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\obj\Debug\net7.0\refint
 d:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\obj\Debug\net7.0\Monopoly.Test.pdb
 d:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\obj\Debug\net7.0\Monopoly.Test.genruntimeconfig.cache
 d:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\obj\Debug\net7.0\ref\Monopoly.Test.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\bin\Debug\net7.0\Castle.Core.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\bin\Debug\net7.0\Moq.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\bin\Debug\net7.0\System.Diagnostics.EventLog.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
+D:\Csharp-MonopolyGame\MonopolyConsoleGame\Monopoly.Test\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll

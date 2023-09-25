@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "jQTX5RjjF74tT6GTHY5zgKHijf/87elozJ0xvBwD3HwuoN3jcQ7AOEDFq6ZjGx75dwEs2oh6ULSykrDbdTECOA==",
+  "dgSpecHash": "CCnbnFHCNBp7GfqceLZILV/D6pKd/bdmYjsoXgFoEBDS+MfuHQy6Hj5EplW8bY31ilPtzPQW9ZE2Srk141GIbw==",
   "success": true,
   "projectFilePath": "D:\\Csharp-MonopolyGame\\MonopolyConsoleGame\\Monopoly.Test\\Monopoly.Test.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Kirana\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\microsoft.codecoverage\\17.5.0\\microsoft.codecoverage.17.5.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\microsoft.net.test.sdk\\17.5.0\\microsoft.net.test.sdk.17.5.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.5.0\\microsoft.testplatform.objectmodel.17.5.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\microsoft.testplatform.testhost\\17.5.0\\microsoft.testplatform.testhost.17.5.0.nupkg.sha512",
+    "C:\\Users\\Kirana\\.nuget\\packages\\moq\\4.20.69\\moq.4.20.69.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\nlog\\5.2.4\\nlog.5.2.4.nupkg.sha512",
@@ -17,6 +19,7 @@
     "C:\\Users\\Kirana\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\nunit.analyzers\\3.6.1\\nunit.analyzers.3.6.1.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\nunit3testadapter\\4.4.2\\nunit3testadapter.4.4.2.nupkg.sha512",
+    "C:\\Users\\Kirana\\.nuget\\packages\\system.diagnostics.eventlog\\6.0.0\\system.diagnostics.eventlog.6.0.0.nupkg.sha512",
     "C:\\Users\\Kirana\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512"
   ],
   "logs": []
