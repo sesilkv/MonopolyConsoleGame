@@ -71,6 +71,11 @@ public class GameController
 		}
 		return null;
 	}
+	
+	public List<IPlayer> GetPlayers()
+	{
+		return _players;
+	}
 
 	public IPlayer GetPlayerIndex(int index)
 	{
